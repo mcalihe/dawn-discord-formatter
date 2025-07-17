@@ -1,3 +1,4 @@
+import { Dialog } from '@headlessui/react'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -5,50 +6,69 @@ import { useTranslation } from 'react-i18next'
 import { FloatingInput } from '../FloatingInput'
 
 interface NewPlayerModalProps {
+  open: boolean
   onClose: () => void
-  onConfirm: (name: string, discord?: string) => void
+  onSave: (data: { name: string; discord?: string }) => void
 }
 
-export const NewPlayerModal = ({ onClose, onConfirm }: NewPlayerModalProps) => {
+export const NewPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) => {
+  const { t } = useTranslation()
   const [name, setName] = useState('')
   const [discord, setDiscord] = useState('')
-  const { t } = useTranslation()
+
+  const handleSave = () => {
+    onSave({ name, discord: discord || undefined })
+    onClose()
+    setName('')
+    setDiscord('')
+  }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
-      <div className="bg-zinc-900 rounded-xl p-6 w-[90%] max-w-sm relative shadow-xl border border-white/10 text-white">
-        <button onClick={onClose} className="absolute top-3 right-3 text-zinc-400 hover:text-white">
-          <X className="w-5 h-5" />
-        </button>
+    <Dialog open={open} onClose={onClose} className="relative z-50">
+      <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
+          <Dialog.Title className="text-lg font-semibold">
+            <div className={'flex flex-row justify-between'}>
+              {t('modal.newPlayer.title')}
 
-        <h2 className="text-lg font-bold mb-4">{t('modal.newPlayer.title')}</h2>
+              <button
+                onClick={onClose}
+                className="text-zinc-400 hover:text-white transition cursor-pointer"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </Dialog.Title>
 
-        <FloatingInput
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          label={t('modal.newPlayer.name.label')}
-        />
+          <FloatingInput
+            id="player-name"
+            label={t('modal.newPlayer.name.label')}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <FloatingInput
+            id="player-discord"
+            label={t('modal.newPlayer.discord.label')}
+            value={discord}
+            onChange={(e) => setDiscord(e.target.value)}
+          />
 
-        <FloatingInput
-          id="discord"
-          value={discord}
-          onChange={(e) => {
-            setDiscord(e.target.value)
-          }}
-          label={t('modal.newPlayer.discord.label')}
-        />
-
-        <button
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 cursor-pointer"
-          onClick={() => {
-            onConfirm(name.trim() || 'Unknown', discord.trim() || undefined)
-            onClose()
-          }}
-        >
-          {t('modal.newPlayer.confirm')}
-        </button>
+          <div className="flex justify-end gap-3 pt-4">
+            <button onClick={onClose} className="text-sm text-zinc-400 hover:text-white transition">
+              {t('modal.cancel')}
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={!name.trim()}
+              className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {t('modal.save')}
+            </button>
+          </div>
+        </Dialog.Panel>
       </div>
-    </div>
+    </Dialog>
   )
 }

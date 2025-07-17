@@ -1,10 +1,12 @@
 import { Dialog } from '@headlessui/react'
+import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DUNGEONS } from '../../data/dungeons'
 import { Character } from '../../models/Character'
 import { FloatingInput } from '../FloatingInput'
+import { FloatingSelect } from '../FloatingSelect'
 
 interface NewCharacterModalProps {
   open: boolean
@@ -24,7 +26,21 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
   const [keystoneLevel, setKeystoneLevel] = useState(0)
   const [keystoneDungeon, setKeystoneDungeon] = useState('AV')
   const [active, setActive] = useState(true)
-
+  const CLASS_OPTIONS = [
+    { value: 'death-knight', label: 'Death Knight' },
+    { value: 'demon-hunter', label: 'Demon Hunter' },
+    { value: 'druid', label: 'Druid' },
+    { value: 'evoker', label: 'Evoker' },
+    { value: 'hunter', label: 'Hunter' },
+    { value: 'mage', label: 'Mage' },
+    { value: 'monk', label: 'Monk' },
+    { value: 'paladin', label: 'Paladin' },
+    { value: 'priest', label: 'Priest' },
+    { value: 'rogue', label: 'Rogue' },
+    { value: 'shaman', label: 'Shaman' },
+    { value: 'warlock', label: 'Warlock' },
+    { value: 'warrior', label: 'Warrior' },
+  ]
   const handleSave = () => {
     onSave({
       name,
@@ -46,7 +62,17 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
           <Dialog.Title className="text-lg font-semibold">
-            {t('modal.newCharacter.title')}
+            <div className={'flex flex-row justify-between'}>
+              {t('modal.newCharacter.title')}
+
+              <button
+                onClick={onClose}
+                className="text-zinc-400 hover:text-white transition cursor-pointer"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </Dialog.Title>
 
           <FloatingInput
@@ -79,6 +105,14 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
             value={ilvl}
             type="number"
             onChange={(e) => setIlvl(e.target.value)}
+          />
+
+          <FloatingSelect
+            id="role"
+            label={t('modal.character.role')}
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            options={CLASS_OPTIONS}
           />
 
           <div className="flex gap-4">

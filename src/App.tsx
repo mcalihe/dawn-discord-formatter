@@ -56,12 +56,11 @@ export default function App() {
         ))}
         <AddNewPlayerCard onClick={() => setShowModal(true)} />
 
-        {showModal && (
-          <NewPlayerModal
-            onClose={() => setShowModal(false)}
-            onConfirm={(name, discord) => AddNewPlayer(name, discord)}
-          />
-        )}
+        <NewPlayerModal
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          onSave={(data) => AddNewPlayer(data.name, data.discord)}
+        />
       </div>
     </div>
   )
