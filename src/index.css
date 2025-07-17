@@ -26,5 +26,5 @@ h1 {
 }
 
 .card {
-  @apply border-2 border-white rounded-xl min-w-[10rem] max-w-[20%] flex-1 p-2;
+  @apply border-2 border-dashed rounded-xl min-w-[10rem] max-w-[20%] flex-1 p-4 flex flex-col justify-center items-center gap-2 text-sm;
 }
