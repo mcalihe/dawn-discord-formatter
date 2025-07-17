@@ -1,3 +1,7 @@
 {
-  "add.new.player": "Add new player"
+  "add.new.player": "Add player",
+  "modal.newPlayer.title": "Add player",
+  "modal.newPlayer.name.label": "Name",
+  "modal.newPlayer.discord.label": "Discord-Name (optional)",
+  "modal.newPlayer.confirm": "Add"
 }

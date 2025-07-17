@@ -1,0 +1,35 @@
+import clsx from 'clsx'
+import { InputHTMLAttributes } from 'react'
+
+interface FloatingInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label: string
+}
+
+export const FloatingInput = ({ id, label, className, ...props }: FloatingInputProps) => {
+  return (
+    <div className="relative w-full mb-4">
+      <input
+        id={id}
+        type="text"
+        placeholder=" "
+        className={clsx(
+          'peer w-full bg-zinc-800 border border-zinc-700 text-white placeholder-transparent p-2 pt-5 rounded focus:outline-none focus:ring-2 focus:ring-blue-500',
+          className
+        )}
+        {...props}
+      />
+      <label
+        htmlFor={id}
+        className="absolute left-2 top-0 text-zinc-400 text-sm transition-all
+        peer-placeholder-shown:top-3
+        peer-placeholder-shown:text-base
+        peer-placeholder-shown:text-zinc-500
+        peer-focus:top-0
+        peer-focus:text-sm
+        peer-focus:text-blue-400"
+      >
+        {label}
+      </label>
+    </div>
+  )
+}
