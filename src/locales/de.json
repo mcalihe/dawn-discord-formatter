@@ -1,8 +1,20 @@
 {
   "character.add": "",
   "add.new.player": "Spieler hinzufügen",
+  "modal.newCharacter.title": "",
+  "modal.newCharacter.name.label": "",
+  "modal.newCharacter.realm.label": "",
+  "modal.newCharacter.class.label": "",
+  "modal.newCharacter.ilvl.label": "",
+  "modal.newCharacter.keystone.level": "",
+  "modal.newCharacter.keystone.dungeon": "",
+  "modal.newCharacter.active": "",
+  "modal.cancel": "",
+  "modal.save": "",
   "modal.newPlayer.title": "Spieler hinzufügen",
   "modal.newPlayer.name.label": "",
   "modal.newPlayer.discord.label": "",
-  "modal.newPlayer.confirm": "Hinzufügen"
+  "tooltip.selectClassFirst": "",
+  "modal.newCharacter.spec.placeholder": "",
+  "modal.newCharacter.spec.label": ""
 }

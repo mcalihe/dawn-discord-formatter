@@ -1,8 +1,20 @@
 {
   "character.add": "Add character",
   "add.new.player": "Add player",
+  "modal.newCharacter.title": "Add new character",
+  "modal.newCharacter.name.label": "Character name",
+  "modal.newCharacter.realm.label": "Realm",
+  "modal.newCharacter.class.label": "Class",
+  "modal.newCharacter.ilvl.label": "Item level",
+  "modal.newCharacter.keystone.level": "Keystone level",
+  "modal.newCharacter.keystone.dungeon": "Dungeon",
+  "modal.newCharacter.active": "Mark as active",
+  "modal.cancel": "Cancel",
+  "modal.save": "Save",
   "modal.newPlayer.title": "Add player",
   "modal.newPlayer.name.label": "Name",
-  "modal.newPlayer.discord.label": "Discord-Name (optional)",
-  "modal.newPlayer.confirm": "Add"
+  "modal.newPlayer.discord.label": "Discord name (optional)",
+  "tooltip.selectClassFirst": "Please select a class first",
+  "modal.newCharacter.spec.placeholder": "Select specialization(s)",
+  "modal.newCharacter.spec.label": "Specializations"
 }

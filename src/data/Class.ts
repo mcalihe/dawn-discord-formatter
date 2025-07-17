@@ -1,0 +1,31 @@
+export enum Class {
+  DeathKnight = 'death-knight',
+  DemonHunter = 'demon-hunter',
+  Druid = 'druid',
+  Evoker = 'evoker',
+  Hunter = 'hunter',
+  Mage = 'mage',
+  Monk = 'monk',
+  Paladin = 'paladin',
+  Priest = 'priest',
+  Rogue = 'rogue',
+  Shaman = 'shaman',
+  Warlock = 'warlock',
+  Warrior = 'warrior',
+}
+
+export const CLASSES = [
+  { id: Class.DeathKnight, label: 'Death Knight' },
+  { id: Class.DemonHunter, label: 'Demon Hunter' },
+  { id: Class.Druid, label: 'Druid' },
+  { id: Class.Evoker, label: 'Evoker' },
+  { id: Class.Hunter, label: 'Hunter' },
+  { id: Class.Mage, label: 'Mage' },
+  { id: Class.Monk, label: 'Monk' },
+  { id: Class.Paladin, label: 'Paladin' },
+  { id: Class.Priest, label: 'Priest' },
+  { id: Class.Rogue, label: 'Rogue' },
+  { id: Class.Shaman, label: 'Shaman' },
+  { id: Class.Warlock, label: 'Warlock' },
+  { id: Class.Warrior, label: 'Warrior' },
+]

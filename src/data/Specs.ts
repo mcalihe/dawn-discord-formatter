@@ -1,7 +1,7 @@
-import { Classes } from './Classes'
-import { CharacterRole } from './Roles'
+import { Class } from './Class'
+import { Role } from './Roles'
 
-export enum CharacterSpec {
+export enum Spec {
   // Death Knight
   Blood = 'Blood',
   Frost = 'Frost',
@@ -68,70 +68,137 @@ export enum CharacterSpec {
   ProtectionWarrior = 'ProtectionWarrior',
 }
 
-export const SPECS_BY_CLASS: Record<Classes, { spec: CharacterSpec; role: CharacterRole }[]> = {
-  [Classes.DeathKnight]: [
-    { spec: CharacterSpec.Blood, role: CharacterRole.Tank },
-    { spec: CharacterSpec.Frost, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Unholy, role: CharacterRole.DPS },
+export const SPEC_OPTIONS = [
+  // Death Knight
+  { id: Spec.Blood, label: 'Blood' },
+  { id: Spec.Frost, label: 'Frost' },
+  { id: Spec.Unholy, label: 'Unholy' },
+
+  // Demon Hunter
+  { id: Spec.Havoc, label: 'Havoc' },
+  { id: Spec.Vengeance, label: 'Vengeance' },
+
+  // Druid
+  { id: Spec.Balance, label: 'Balance' },
+  { id: Spec.Feral, label: 'Feral' },
+  { id: Spec.Guardian, label: 'Guardian' },
+  { id: Spec.RestorationDruid, label: 'Restoration' },
+
+  // Evoker
+  { id: Spec.Devastation, label: 'Devastation' },
+  { id: Spec.Preservation, label: 'Preservation' },
+  { id: Spec.Augmentation, label: 'Augmentation' },
+
+  // Hunter
+  { id: Spec.BeastMastery, label: 'Beast Mastery' },
+  { id: Spec.Marksmanship, label: 'Marksmanship' },
+  { id: Spec.Survival, label: 'Survival' },
+
+  // Mage
+  { id: Spec.Arcane, label: 'Arcane' },
+  { id: Spec.Fire, label: 'Fire' },
+  { id: Spec.FrostMage, label: 'Frost' },
+
+  // Monk
+  { id: Spec.Brewmaster, label: 'Brewmaster' },
+  { id: Spec.Mistweaver, label: 'Mistweaver' },
+  { id: Spec.Windwalker, label: 'Windwalker' },
+
+  // Paladin
+  { id: Spec.HolyPaladin, label: 'Holy' },
+  { id: Spec.ProtectionPaladin, label: 'Protection' },
+  { id: Spec.Retribution, label: 'Retribution' },
+
+  // Priest
+  { id: Spec.Discipline, label: 'Discipline' },
+  { id: Spec.HolyPriest, label: 'Holy' },
+  { id: Spec.Shadow, label: 'Shadow' },
+
+  // Rogue
+  { id: Spec.Assassination, label: 'Assassination' },
+  { id: Spec.Outlaw, label: 'Outlaw' },
+  { id: Spec.Subtlety, label: 'Subtlety' },
+
+  // Shaman
+  { id: Spec.Elemental, label: 'Elemental' },
+  { id: Spec.Enhancement, label: 'Enhancement' },
+  { id: Spec.RestorationShaman, label: 'Restoration' },
+
+  // Warlock
+  { id: Spec.Affliction, label: 'Affliction' },
+  { id: Spec.Demonology, label: 'Demonology' },
+  { id: Spec.Destruction, label: 'Destruction' },
+
+  // Warrior
+  { id: Spec.Arms, label: 'Arms' },
+  { id: Spec.Fury, label: 'Fury' },
+  { id: Spec.ProtectionWarrior, label: 'Protection' },
+]
+
+export const SPECS_BY_CLASS: Record<Class, { spec: Spec; role: Role }[]> = {
+  [Class.DeathKnight]: [
+    { spec: Spec.Blood, role: Role.Tank },
+    { spec: Spec.Frost, role: Role.DPS },
+    { spec: Spec.Unholy, role: Role.DPS },
   ],
-  [Classes.DemonHunter]: [
-    { spec: CharacterSpec.Havoc, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Vengeance, role: CharacterRole.Tank },
+  [Class.DemonHunter]: [
+    { spec: Spec.Havoc, role: Role.DPS },
+    { spec: Spec.Vengeance, role: Role.Tank },
   ],
-  [Classes.Druid]: [
-    { spec: CharacterSpec.Balance, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Feral, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Guardian, role: CharacterRole.Tank },
-    { spec: CharacterSpec.RestorationDruid, role: CharacterRole.Healer },
+  [Class.Druid]: [
+    { spec: Spec.Balance, role: Role.DPS },
+    { spec: Spec.Feral, role: Role.DPS },
+    { spec: Spec.Guardian, role: Role.Tank },
+    { spec: Spec.RestorationDruid, role: Role.Healer },
   ],
-  [Classes.Evoker]: [
-    { spec: CharacterSpec.Devastation, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Preservation, role: CharacterRole.Healer },
-    { spec: CharacterSpec.Augmentation, role: CharacterRole.DPS },
+  [Class.Evoker]: [
+    { spec: Spec.Devastation, role: Role.DPS },
+    { spec: Spec.Preservation, role: Role.Healer },
+    { spec: Spec.Augmentation, role: Role.DPS },
   ],
-  [Classes.Hunter]: [
-    { spec: CharacterSpec.BeastMastery, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Marksmanship, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Survival, role: CharacterRole.DPS },
+  [Class.Hunter]: [
+    { spec: Spec.BeastMastery, role: Role.DPS },
+    { spec: Spec.Marksmanship, role: Role.DPS },
+    { spec: Spec.Survival, role: Role.DPS },
   ],
-  [Classes.Mage]: [
-    { spec: CharacterSpec.Arcane, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Fire, role: CharacterRole.DPS },
-    { spec: CharacterSpec.FrostMage, role: CharacterRole.DPS },
+  [Class.Mage]: [
+    { spec: Spec.Arcane, role: Role.DPS },
+    { spec: Spec.Fire, role: Role.DPS },
+    { spec: Spec.FrostMage, role: Role.DPS },
   ],
-  [Classes.Monk]: [
-    { spec: CharacterSpec.Brewmaster, role: CharacterRole.Tank },
-    { spec: CharacterSpec.Mistweaver, role: CharacterRole.Healer },
-    { spec: CharacterSpec.Windwalker, role: CharacterRole.DPS },
+  [Class.Monk]: [
+    { spec: Spec.Brewmaster, role: Role.Tank },
+    { spec: Spec.Mistweaver, role: Role.Healer },
+    { spec: Spec.Windwalker, role: Role.DPS },
   ],
-  [Classes.Paladin]: [
-    { spec: CharacterSpec.HolyPaladin, role: CharacterRole.Healer },
-    { spec: CharacterSpec.ProtectionPaladin, role: CharacterRole.Tank },
-    { spec: CharacterSpec.Retribution, role: CharacterRole.DPS },
+  [Class.Paladin]: [
+    { spec: Spec.HolyPaladin, role: Role.Healer },
+    { spec: Spec.ProtectionPaladin, role: Role.Tank },
+    { spec: Spec.Retribution, role: Role.DPS },
   ],
-  [Classes.Priest]: [
-    { spec: CharacterSpec.Discipline, role: CharacterRole.Healer },
-    { spec: CharacterSpec.HolyPriest, role: CharacterRole.Healer },
-    { spec: CharacterSpec.Shadow, role: CharacterRole.DPS },
+  [Class.Priest]: [
+    { spec: Spec.Discipline, role: Role.Healer },
+    { spec: Spec.HolyPriest, role: Role.Healer },
+    { spec: Spec.Shadow, role: Role.DPS },
   ],
-  [Classes.Rogue]: [
-    { spec: CharacterSpec.Assassination, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Outlaw, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Subtlety, role: CharacterRole.DPS },
+  [Class.Rogue]: [
+    { spec: Spec.Assassination, role: Role.DPS },
+    { spec: Spec.Outlaw, role: Role.DPS },
+    { spec: Spec.Subtlety, role: Role.DPS },
   ],
-  [Classes.Shaman]: [
-    { spec: CharacterSpec.Elemental, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Enhancement, role: CharacterRole.DPS },
-    { spec: CharacterSpec.RestorationShaman, role: CharacterRole.Healer },
+  [Class.Shaman]: [
+    { spec: Spec.Elemental, role: Role.DPS },
+    { spec: Spec.Enhancement, role: Role.DPS },
+    { spec: Spec.RestorationShaman, role: Role.Healer },
   ],
-  [Classes.Warlock]: [
-    { spec: CharacterSpec.Affliction, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Demonology, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Destruction, role: CharacterRole.DPS },
+  [Class.Warlock]: [
+    { spec: Spec.Affliction, role: Role.DPS },
+    { spec: Spec.Demonology, role: Role.DPS },
+    { spec: Spec.Destruction, role: Role.DPS },
   ],
-  [Classes.Warrior]: [
-    { spec: CharacterSpec.Arms, role: CharacterRole.DPS },
-    { spec: CharacterSpec.Fury, role: CharacterRole.DPS },
-    { spec: CharacterSpec.ProtectionWarrior, role: CharacterRole.Tank },
+  [Class.Warrior]: [
+    { spec: Spec.Arms, role: Role.DPS },
+    { spec: Spec.Fury, role: Role.DPS },
+    { spec: Spec.ProtectionWarrior, role: Role.Tank },
   ],
 }

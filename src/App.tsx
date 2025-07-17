@@ -3,7 +3,11 @@ import { useState } from 'react'
 import { AddNewPlayerCard } from './components/AddNewPlayerCard'
 import { NewPlayerModal } from './components/modals/NewPlayerModal'
 import { PlayerCard } from './components/PlayerCard'
+import { Class } from './data/Class'
+import { Role } from './data/Roles'
+import { Spec } from './data/Specs'
 import { Player } from './models/Player'
+
 export default function App() {
   const test: Player[] = [
     {
@@ -15,12 +19,12 @@ export default function App() {
           name: 'Nerfblaster',
           realm: 'Blackhand',
           active: true,
-          class: 'Hunter',
-          ilvl: 682,
+          class: Class.Hunter,
+          iLvl: 682,
           keystone: { dungeon: 'ML', level: 12 },
-          role: 'DD',
+          roles: [Role.DPS],
           source: 'manual',
-          spec: 'MM',
+          specs: [Spec.Marksmanship],
         },
       ],
     },

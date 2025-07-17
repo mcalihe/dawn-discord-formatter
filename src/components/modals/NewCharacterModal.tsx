@@ -1,12 +1,12 @@
-import { Dialog } from '@headlessui/react'
+import { Dialog, Switch } from '@headlessui/react'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Classes } from '../../data/Classes'
+import { Class } from '../../data/Class'
 import { DungeonId, Dungeons } from '../../data/Dungeons'
-import { CharacterRole } from '../../data/Roles'
-import { CharacterSpec, SPECS_BY_CLASS } from '../../data/Specs'
+import { Role } from '../../data/Roles'
+import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
 import { Character } from '../../models/Character'
 import { FloatingInput } from '../FloatingInput'
 import { FloatingSelect } from '../FloatingSelect'
@@ -18,9 +18,15 @@ interface NewCharacterModalProps {
   onSave: (data: Character) => void
 }
 
-const CLASS_OPTIONS = Object.entries(Classes).map(([key, value]) => ({
+const formatLabel = (value: string) =>
+  value
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+
+const CLASS_OPTIONS = Object.entries(Class).map(([, value]) => ({
   value,
-  label: value.replace(/([a-z])([A-Z])/g, '$1 $2'),
+  label: formatLabel(value),
 }))
 
 export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalProps) => {
@@ -28,10 +34,9 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
 
   const [name, setName] = useState('')
   const [realm, setRealm] = useState('')
-  const [charClass, setCharClass] = useState<Classes | ''>('')
-  const [specs, setSpecs] = useState<CharacterSpec[]>([])
-  const [roles, setRoles] = useState<CharacterRole[]>([])
-  const [ilvl, setIlvl] = useState('')
+  const [charClass, setCharClass] = useState<Class>(Class.Hunter)
+  const [specs, setSpecs] = useState<Spec[]>([Spec.BeastMastery])
+  const [ilvl, setIlvl] = useState(680)
   const [keystoneLevel, setKeystoneLevel] = useState(12)
   const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(DungeonId.DFC)
   const [active, setActive] = useState(true)
@@ -39,9 +44,9 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
   const reset = () => {
     setName('')
     setRealm('')
-    setCharClass('')
-    setSpecs([])
-    setIlvl('')
+    setCharClass(Class.Hunter)
+    setSpecs([Spec.BeastMastery])
+    setIlvl(680)
     setKeystoneLevel(12)
     setKeystoneDungeon(DungeonId.DFC)
     setActive(true)
@@ -53,23 +58,22 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
   }
 
   const handleClassChange = (value: string) => {
-    setCharClass(value as Classes)
+    setCharClass(value as Class)
     setSpecs([])
-    setRoles([])
   }
 
   const handleSave = () => {
     const roles = specs
-      .map((s) => SPECS_BY_CLASS[charClass as Classes].find((entry) => entry.spec === s)?.role)
-      .filter(Boolean) as CharacterRole[]
+      .map((s) => SPECS_BY_CLASS[charClass as Class].find((entry) => entry.spec === s)?.role)
+      .filter(Boolean) as Role[]
 
     onSave({
       name,
       realm,
       class: charClass,
-      spec: specs.join(', '),
-      role: roles.join(', ') as CharacterRole,
-      ilvl: parseInt(ilvl, 10),
+      specs: specs,
+      roles: roles,
+      iLvl: ilvl,
       source: 'manual',
       active,
       keystone: { level: keystoneLevel, dungeon: keystoneDungeon },
@@ -95,18 +99,22 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
             </div>
           </Dialog.Title>
 
-          <FloatingInput
-            id="char-name"
-            label={t('modal.newCharacter.name.label')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <FloatingInput
-            id="char-realm"
-            label={t('modal.newCharacter.realm.label')}
-            value={realm}
-            onChange={(e) => setRealm(e.target.value)}
-          />
+          <div className="flex gap-4">
+            <FloatingInput
+              id="char-name"
+              label={t('modal.newCharacter.name.label')}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required={true}
+            />
+            <FloatingInput
+              id="char-realm"
+              label={t('modal.newCharacter.realm.label')}
+              value={realm}
+              onChange={(e) => setRealm(e.target.value)}
+              required={true}
+            />
+          </div>
 
           <FloatingSelect
             id="char-class"
@@ -114,20 +122,17 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
             value={charClass}
             onChange={(e) => handleClassChange(e.target.value)}
             options={CLASS_OPTIONS}
+            required={true}
           />
 
-          <SpecMultiSelect
-            charClass={charClass}
-            specs={specs}
-            setSpecs={setSpecs}
-            setRoles={setRoles}
-          />
+          <SpecMultiSelect charClass={charClass} specs={specs} setSpecs={setSpecs} />
           <FloatingInput
             id="char-ilvl"
             label={t('modal.newCharacter.ilvl.label')}
             value={ilvl}
             type="number"
-            onChange={(e) => setIlvl(e.target.value)}
+            onChange={(e) => setIlvl(parseInt(e.target.value))}
+            required={true}
           />
 
           <div className="flex gap-4">
@@ -137,6 +142,7 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
               type="number"
               value={keystoneLevel.toString()}
               onChange={(e) => setKeystoneLevel(Number(e.target.value))}
+              required={true}
             />
             <FloatingSelect
               id="keystone-dungeon"
@@ -144,21 +150,30 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
               value={keystoneDungeon}
               onChange={(e) => setKeystoneDungeon(e.target.value as DungeonId)}
               options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
+              required={true}
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={active}
-              onChange={() => setActive(!active)}
-              id="char-active"
-              className="accent-blue-500"
-            />
-            <label htmlFor="char-active" className="text-sm">
-              {t('modal.newCharacter.active')}
-            </label>
-          </div>
+          <Switch.Group>
+            <div className="flex items-center gap-3">
+              <Switch
+                checked={active}
+                onChange={setActive}
+                className={`${
+                  active ? 'bg-blue-600' : 'bg-zinc-700'
+                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+              >
+                <span
+                  className={`${
+                    active ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                />
+              </Switch>
+              <Switch.Label className="text-sm text-white">
+                {t('modal.newCharacter.active')}
+              </Switch.Label>
+            </div>
+          </Switch.Group>
 
           <div className="flex justify-end gap-3 pt-4">
             <button
@@ -169,7 +184,15 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
             </button>
             <button
               onClick={handleSave}
-              disabled={!name.trim() || !charClass || specs.length === 0}
+              disabled={
+                !name.trim() ||
+                !realm.trim() ||
+                !charClass ||
+                specs.length === 0 ||
+                !keystoneLevel ||
+                !keystoneDungeon ||
+                !ilvl
+              }
               className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t('modal.save')}
