@@ -1,11 +1,32 @@
 import { useState } from 'react'
 
 import { AddNewPlayerCard } from './components/AddNewPlayerCard'
-import { NewPlayerModal } from './components/NewPlayerModal'
+import { NewPlayerModal } from './components/modals/NewPlayerModal'
 import { PlayerCard } from './components/PlayerCard'
 import { Player } from './models/Player'
 export default function App() {
-  const [players, setPlayers] = useState<Player[]>([])
+  const test: Player[] = [
+    {
+      discord: 'McAlihe',
+      name: 'Michael',
+      id: 123,
+      characters: [
+        {
+          name: 'Nerfblaster',
+          realm: 'Blackhand',
+          active: true,
+          class: 'Hunter',
+          ilvl: 682,
+          keystone: { dungeon: 'ML', level: 12 },
+          role: 'DD',
+          source: 'manual',
+          spec: 'MM',
+        },
+      ],
+    },
+  ]
+
+  const [players, setPlayers] = useState<Player[]>(test)
   const [showModal, setShowModal] = useState(false)
   function AddNewPlayer(name: string, discord?: string) {
     const highestId = Math.max(...players.map((o) => o.id))
@@ -18,7 +39,20 @@ export default function App() {
       <h1>Dawn Discord Formatter</h1>
       <div className={'flex flex-row min-h-[30rem] gap-2'}>
         {players.map((player) => (
-          <PlayerCard key={player.name} player={player} />
+          <PlayerCard
+            key={player.name}
+            player={player}
+            onUpdatePlayer={(player) => {
+              const idx = players.findIndex((p) => {
+                return p.id === player.id
+              })
+
+              if (idx >= 0 && players.length > idx) {
+                players[idx] = player
+                setPlayers([...players])
+              }
+            }}
+          />
         ))}
         <AddNewPlayerCard onClick={() => setShowModal(true)} />
 

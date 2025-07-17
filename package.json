@@ -12,6 +12,7 @@
     "extract:watch": "i18next --config i18next-parser.config.cjs --watch"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "@tailwindcss/vite": "^4.1.11",
     "clsx": "^2.1.1",
     "i18next": "^24.2.3",

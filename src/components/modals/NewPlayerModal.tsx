@@ -2,7 +2,7 @@ import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FloatingInput } from './FloatingInput'
+import { FloatingInput } from '../FloatingInput'
 
 interface NewPlayerModalProps {
   onClose: () => void

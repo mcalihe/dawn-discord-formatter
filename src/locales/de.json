@@ -1,7 +1,8 @@
 {
+  "character.add": "",
   "add.new.player": "Spieler hinzufügen",
   "modal.newPlayer.title": "Spieler hinzufügen",
-  "modal.newPlayer.name.placeholder": "Name",
-  "modal.newPlayer.discord.placeholder": "Discord-Name (optional)",
+  "modal.newPlayer.name.label": "",
+  "modal.newPlayer.discord.label": "",
   "modal.newPlayer.confirm": "Hinzufügen"
 }
