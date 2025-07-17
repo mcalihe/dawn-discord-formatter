@@ -32,6 +32,10 @@ export const PlayerCard = ({ player, onUpdatePlayer }: PlayerCardProps) => {
             <CharacterBadge
               key={idx}
               char={char}
+              onUpdateKeystone={(data) => {
+                player.characters[idx].keystone = data
+                onUpdatePlayer(player)
+              }}
               onToggleActive={() => {
                 player.characters[idx].active = !player.characters[idx].active
                 onUpdatePlayer(player)
