@@ -7,7 +7,7 @@ interface FloatingInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const FloatingInput = ({ id, label, className, ...props }: FloatingInputProps) => {
   return (
-    <div className="relative w-full">
+    <div className={clsx(className, 'relative')}>
       <input
         id={id}
         type="text"

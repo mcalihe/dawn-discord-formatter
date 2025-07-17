@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { Character } from '../models/Character'
 import { Player } from '../models/Player'
 import { AddNewCharacterBadge } from './AddNewCharacterBadge'
-import { CharacterBadge } from './CharacterBadge'
-import { NewCharacterModal } from './modals/NewCharacterModal'
+import { CharacterCard } from './CharacterCard'
+import { EditCharacterModal } from './modals/EditCharacterModal'
 
 type PlayerCardProps = { player: Player; onUpdatePlayer: (player: Player) => void }
 
@@ -29,9 +29,13 @@ export const PlayerCard = ({ player, onUpdatePlayer }: PlayerCardProps) => {
         </div>
         <div className={'flex flex-col gap-2'}>
           {player.characters.map((char, idx) => (
-            <CharacterBadge
+            <CharacterCard
               key={idx}
               char={char}
+              onUpdateChar={(char) => {
+                player.characters[idx] = char
+                onUpdatePlayer(player)
+              }}
               onUpdateKeystone={(data) => {
                 player.characters[idx].keystone = data
                 onUpdatePlayer(player)
@@ -42,9 +46,9 @@ export const PlayerCard = ({ player, onUpdatePlayer }: PlayerCardProps) => {
               }}
             />
           ))}
-          {player.characters.length > 0 && <div className={'h-0.5'} />}
           <AddNewCharacterBadge onClick={() => setShowModal(true)} />
-          <NewCharacterModal
+          <EditCharacterModal
+            mode={'create'}
             open={showModal}
             onClose={() => setShowModal(false)}
             onSave={handleAddCharacter}

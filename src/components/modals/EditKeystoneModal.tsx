@@ -62,7 +62,8 @@ export const EditKeystoneModal = ({
               id="keystone-level"
               label={t('modal.newCharacter.keystone.level')}
               type="number"
-              value={level.toString()}
+              value={level}
+              className={'flex-1'}
               onChange={(e) => setLevel(Number(e.target.value))}
               required
             />
@@ -70,6 +71,7 @@ export const EditKeystoneModal = ({
               id="keystone-dungeon"
               label={t('modal.newCharacter.keystone.dungeon')}
               value={dungeon}
+              className={'flex-4'}
               onChange={(e) => setDungeon(e.target.value as DungeonId)}
               options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
               required

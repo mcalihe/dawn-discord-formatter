@@ -11,20 +11,28 @@ interface NewPlayerModalProps {
   onSave: (data: { name: string; discord?: string }) => void
 }
 
-export const NewPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) => {
+export const EditPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) => {
   const { t } = useTranslation()
   const [name, setName] = useState('')
   const [discord, setDiscord] = useState('')
 
-  const handleSave = () => {
-    onSave({ name, discord: discord || undefined })
-    onClose()
+  const resetData = () => {
     setName('')
     setDiscord('')
   }
 
+  const handleClose = () => {
+    resetData()
+    onClose()
+  }
+
+  const handleSave = () => {
+    onSave({ name, discord: discord || undefined })
+    handleClose()
+  }
+
   return (
-    <Dialog open={open} onClose={onClose} className="relative z-50">
+    <Dialog open={open} onClose={handleClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
@@ -33,7 +41,7 @@ export const NewPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) =
               {t('modal.newPlayer.title')}
 
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="text-zinc-400 hover:text-white transition cursor-pointer"
                 aria-label="Close"
               >
@@ -56,7 +64,10 @@ export const NewPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) =
           />
 
           <div className="flex justify-end gap-3 pt-4">
-            <button onClick={onClose} className="text-sm text-zinc-400 hover:text-white transition">
+            <button
+              onClick={handleClose}
+              className="text-sm text-zinc-400 hover:text-white transition"
+            >
               {t('modal.cancel')}
             </button>
             <button

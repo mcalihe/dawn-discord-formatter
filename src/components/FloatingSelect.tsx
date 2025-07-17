@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { SelectHTMLAttributes } from 'react'
 
 interface FloatingSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
@@ -11,21 +12,22 @@ export const FloatingSelect = ({
   label,
   value,
   onChange,
+  className,
   options,
   ...props
 }: FloatingSelectProps) => {
   return (
-    <div className="relative w-full mb-4">
+    <div className={(clsx(className), 'relative')}>
       <select
         id={id}
         value={value}
         onChange={onChange}
-        className="peer w-full bg-zinc-800 border border-zinc-700 text-white placeholder-transparent p-2 pt-5 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+        className={
+          'peer w-full bg-zinc-800 border border-zinc-700 text-white placeholder-transparent p-2 pt-5 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none'
+        }
         {...props}
       >
-        <option value="" disabled hidden>
-          {/* Damit der Placeholder invisible ist, aber das Label reagiert */}
-        </option>
+        <option value="" disabled hidden />
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

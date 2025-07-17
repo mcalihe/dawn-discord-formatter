@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
 import { AddNewPlayerCard } from './components/AddNewPlayerCard'
-import { NewPlayerModal } from './components/modals/NewPlayerModal'
+import { EditPlayerModal } from './components/modals/EditPlayerModal'
 import { PlayerCard } from './components/PlayerCard'
 import { Class } from './data/Class'
+import { DungeonId } from './data/Dungeons'
 import { Role } from './data/Roles'
 import { Spec } from './data/Specs'
 import { Player } from './models/Player'
@@ -21,7 +22,7 @@ export default function App() {
           active: true,
           class: Class.Hunter,
           iLvl: 682,
-          keystone: { dungeon: 'ML', level: 12 },
+          keystone: { dungeon: DungeonId.ML, level: 12 },
           roles: [Role.DPS],
           source: 'manual',
           specs: [Spec.Marksmanship],
@@ -33,8 +34,9 @@ export default function App() {
   const [players, setPlayers] = useState<Player[]>(test)
   const [showModal, setShowModal] = useState(false)
   function AddNewPlayer(name: string, discord?: string) {
+    console.log('AddNewPlayer', name, discord)
     const highestId = Math.max(...players.map((o) => o.id))
-    const newId = highestId != Infinity ? highestId : 0
+    const newId = highestId != Infinity ? highestId + 1 : 0
     setPlayers([...players, { id: newId, name: name, discord: discord, characters: [] }])
   }
 
@@ -60,7 +62,7 @@ export default function App() {
         ))}
         <AddNewPlayerCard onClick={() => setShowModal(true)} />
 
-        <NewPlayerModal
+        <EditPlayerModal
           open={showModal}
           onClose={() => setShowModal(false)}
           onSave={(data) => AddNewPlayer(data.name, data.discord)}

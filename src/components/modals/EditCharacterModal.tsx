@@ -16,6 +16,8 @@ interface NewCharacterModalProps {
   open: boolean
   onClose: () => void
   onSave: (data: Character) => void
+  character?: Character
+  mode: 'create' | 'edit'
 }
 
 const formatLabel = (value: string) =>
@@ -29,31 +31,41 @@ const CLASS_OPTIONS = Object.entries(Class).map(([, value]) => ({
   label: formatLabel(value),
 }))
 
-export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalProps) => {
+export const EditCharacterModal = ({
+  open,
+  onClose,
+  onSave,
+  character,
+  mode = 'edit',
+}: NewCharacterModalProps) => {
   const { t } = useTranslation()
 
-  const [name, setName] = useState('')
-  const [realm, setRealm] = useState('')
-  const [charClass, setCharClass] = useState<Class>(Class.Hunter)
-  const [specs, setSpecs] = useState<Spec[]>([Spec.BeastMastery])
-  const [ilvl, setIlvl] = useState(680)
-  const [keystoneLevel, setKeystoneLevel] = useState(12)
-  const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(DungeonId.DFC)
-  const [active, setActive] = useState(true)
+  const [name, setName] = useState(character?.name ?? '')
+  const [realm, setRealm] = useState(character?.realm ?? '')
+  const [charClass, setCharClass] = useState<Class>(character?.class ?? Class.Hunter)
+  const [specs, setSpecs] = useState<Spec[]>(character?.specs ?? [Spec.BeastMastery])
+  const [ilvl, setIlvl] = useState(character?.iLvl ?? 680)
+  const [keystoneLevel, setKeystoneLevel] = useState(character?.keystone.level ?? 12)
+  const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(
+    character?.keystone.dungeon ?? DungeonId.DFC
+  )
+  const [active, setActive] = useState(character?.active !== undefined ? character.active : true)
 
-  const reset = () => {
-    setName('')
-    setRealm('')
-    setCharClass(Class.Hunter)
-    setSpecs([Spec.BeastMastery])
-    setIlvl(680)
-    setKeystoneLevel(12)
-    setKeystoneDungeon(DungeonId.DFC)
+  const resetData = () => {
+    setName(character?.name ?? '')
+    setRealm(character?.realm ?? '')
+    setCharClass(character?.class ?? Class.Hunter)
+    setSpecs(character?.specs ?? [Spec.BeastMastery])
+    setIlvl(character?.iLvl ?? 680)
+    setKeystoneLevel(character?.keystone.level ?? 12)
+    setKeystoneDungeon(character?.keystone.dungeon ?? DungeonId.DFC)
     setActive(true)
   }
 
-  const handleClose = () => {
-    reset()
+  const handleClose = (reset: boolean = false) => {
+    if (reset) {
+      resetData()
+    }
     onClose()
   }
 
@@ -78,11 +90,11 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
       active,
       keystone: { level: keystoneLevel, dungeon: keystoneDungeon },
     })
-    handleClose()
+    handleClose(mode == 'create')
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} className="relative z-50">
+    <Dialog open={open} onClose={() => handleClose(true)} className="relative z-50">
       <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
@@ -90,7 +102,7 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
             <div className="flex justify-between items-center">
               {t('modal.newCharacter.title')}
               <button
-                onClick={handleClose}
+                onClick={() => handleClose(true)}
                 className="text-zinc-400 hover:text-white transition"
                 aria-label="Close"
               >
@@ -140,7 +152,8 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
               id="keystone-level"
               label={t('modal.newCharacter.keystone.level')}
               type="number"
-              value={keystoneLevel.toString()}
+              value={keystoneLevel}
+              className={'flex-1'}
               onChange={(e) => setKeystoneLevel(Number(e.target.value))}
               required={true}
             />
@@ -148,6 +161,7 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
               id="keystone-dungeon"
               label={t('modal.newCharacter.keystone.dungeon')}
               value={keystoneDungeon}
+              className={'flex-4'}
               onChange={(e) => setKeystoneDungeon(e.target.value as DungeonId)}
               options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
               required={true}
@@ -177,7 +191,7 @@ export const NewCharacterModal = ({ open, onClose, onSave }: NewCharacterModalPr
 
           <div className="flex justify-end gap-3 pt-4">
             <button
-              onClick={handleClose}
+              onClick={() => handleClose(true)}
               className="text-sm text-zinc-400 hover:text-white transition"
             >
               {t('modal.cancel')}
