@@ -15,8 +15,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body{
+body, #root{
   display: flex;
+  flex:1;
+}
+
+body{
   padding: 2rem;
 }
 
