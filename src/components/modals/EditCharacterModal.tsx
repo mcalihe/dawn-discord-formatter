@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Class, useClassTranslations } from '../../data/Class'
-import { DUNGEON_TRANSLATION_KEYS, DungeonId } from '../../data/Dungeons'
+import { DungeonId, useDungeonTranslations } from '../../data/Dungeons'
 import { Faction } from '../../data/Faction'
 import { Role } from '../../data/Roles'
 import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
@@ -32,6 +32,7 @@ export const EditCharacterModal = ({
 }: NewCharacterModalProps) => {
   const { t } = useTranslation()
   const classTranslations = useClassTranslations()
+  const dungeonTranslations = useDungeonTranslations()
 
   const CLASS_OPTIONS = Object.entries(classTranslations).map(([key, label]) => ({
     value: key,
@@ -218,7 +219,7 @@ export const EditCharacterModal = ({
               value={keystoneDungeon}
               className={'flex-2'}
               onChange={(e) => setKeystoneDungeon(e.target.value as DungeonId)}
-              options={Object.entries(DUNGEON_TRANSLATION_KEYS).map(([key, label]) => ({
+              options={Object.entries(dungeonTranslations).map(([key, label]) => ({
                 value: key,
                 label: label,
               }))}

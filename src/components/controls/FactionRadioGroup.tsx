@@ -1,8 +1,7 @@
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
-import { useTranslation } from 'react-i18next'
 
-import { Faction, FACTION_TRANSLATION_KEYS } from '../../data/Faction'
+import { Faction, useFactionTranslations } from '../../data/Faction'
 
 interface FactionRadioGroupProps {
   value: Faction
@@ -10,7 +9,7 @@ interface FactionRadioGroupProps {
 }
 
 export const FactionRadioGroup = ({ value, onChange }: FactionRadioGroupProps) => {
-  const { t } = useTranslation()
+  const factionTranslations = useFactionTranslations()
 
   return (
     <div className="w-full">
@@ -26,7 +25,7 @@ export const FactionRadioGroup = ({ value, onChange }: FactionRadioGroupProps) =
                     : 'bg-zinc-800 text-zinc-300 border-zinc-600 hover:border-blue-400 hover:text-white'
                 )}
               >
-                <span>{FACTION_TRANSLATION_KEYS[faction]}</span>
+                <span>{factionTranslations[faction]}</span>
               </div>
             )}
           </RadioGroup.Option>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AddNewPlayerCard } from './components/cards/AddNewPlayerCard'
 import { PlayerCard } from './components/cards/PlayerCard'
@@ -6,6 +7,7 @@ import { LanguageSwitcher } from './components/controls/LanguageSwitcher'
 import { Footer } from './components/Footer'
 import { MarkdownOutput } from './components/MarkdownOutput'
 import { EditPlayerModal } from './components/modals/EditPlayerModal'
+import { useArmorSlotTranslations } from './data/AmorSlot'
 import { Class, useClassTranslations } from './data/Class'
 import { DungeonId } from './data/Dungeons'
 import { Faction } from './data/Faction'
@@ -41,6 +43,8 @@ export default function App() {
     },
   ]
   const classTranslations = useClassTranslations()
+  const armorSlotTranslations = useArmorSlotTranslations()
+  const { t } = useTranslation()
 
   const [players, setPlayers] = useState<Player[]>(test)
   const [output, setOutput] = useState<string>()
@@ -52,7 +56,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    setOutput(DiscordFormatService.formatTeam(players, classTranslations))
+    setOutput(DiscordFormatService.formatTeam(players, classTranslations, armorSlotTranslations, t))
   }, [players])
 
   return (

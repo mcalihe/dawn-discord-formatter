@@ -1,4 +1,4 @@
-import i18n from '../i18n'
+import { useTranslation } from 'react-i18next'
 
 export enum ArmorSlot {
   Head = 'head',
@@ -24,23 +24,27 @@ export enum ArmorSlot {
   Shirt = 'shirt',
 }
 
-export const ARMOR_SLOT_TRANSLATIONS: Record<ArmorSlot, string> = {
-  [ArmorSlot.Head]: i18n.t('armorSlot.head'),
-  [ArmorSlot.Neck]: i18n.t('armorSlot.neck'),
-  [ArmorSlot.Shoulder]: i18n.t('armorSlot.shoulder'),
-  [ArmorSlot.Back]: i18n.t('armorSlot.back'),
-  [ArmorSlot.Chest]: i18n.t('armorSlot.chest'),
-  [ArmorSlot.Wrist]: i18n.t('armorSlot.wrist'),
-  [ArmorSlot.Hands]: i18n.t('armorSlot.hands'),
-  [ArmorSlot.Waist]: i18n.t('armorSlot.waist'),
-  [ArmorSlot.Legs]: i18n.t('armorSlot.legs'),
-  [ArmorSlot.Feet]: i18n.t('armorSlot.feet'),
-  [ArmorSlot.Finger]: i18n.t('armorSlot.finger'),
-  [ArmorSlot.Trinket]: i18n.t('armorSlot.trinket'),
-  [ArmorSlot.MainHand]: i18n.t('armorSlot.mainhand'),
-  [ArmorSlot.OffHand]: i18n.t('armorSlot.offhand'),
-  [ArmorSlot.TwoHand]: i18n.t('armorSlot.twohand'),
-  [ArmorSlot.Ranged]: i18n.t('armorSlot.ranged'),
-  [ArmorSlot.Tabard]: i18n.t('armorSlot.tabard'),
-  [ArmorSlot.Shirt]: i18n.t('armorSlot.shirt'),
+export function useArmorSlotTranslations(): Record<ArmorSlot, string> {
+  const { t } = useTranslation()
+
+  return {
+    [ArmorSlot.Head]: t('armorSlot.head'),
+    [ArmorSlot.Neck]: t('armorSlot.neck'),
+    [ArmorSlot.Shoulder]: t('armorSlot.shoulder'),
+    [ArmorSlot.Back]: t('armorSlot.back'),
+    [ArmorSlot.Chest]: t('armorSlot.chest'),
+    [ArmorSlot.Wrist]: t('armorSlot.wrist'),
+    [ArmorSlot.Hands]: t('armorSlot.hands'),
+    [ArmorSlot.Waist]: t('armorSlot.waist'),
+    [ArmorSlot.Legs]: t('armorSlot.legs'),
+    [ArmorSlot.Feet]: t('armorSlot.feet'),
+    [ArmorSlot.Finger]: t('armorSlot.finger'),
+    [ArmorSlot.Trinket]: t('armorSlot.trinket'),
+    [ArmorSlot.MainHand]: t('armorSlot.mainhand'),
+    [ArmorSlot.OffHand]: t('armorSlot.offhand'),
+    [ArmorSlot.TwoHand]: t('armorSlot.twohand'),
+    [ArmorSlot.Ranged]: t('armorSlot.ranged'),
+    [ArmorSlot.Tabard]: t('armorSlot.tabard'),
+    [ArmorSlot.Shirt]: t('armorSlot.shirt'),
+  }
 }

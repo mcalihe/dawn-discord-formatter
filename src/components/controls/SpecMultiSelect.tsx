@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Class } from '../../data/Class'
-import { Spec, SPEC_TRANSLATION_KEYS, SPECS_BY_CLASS } from '../../data/Specs'
+import { Spec, SPECS_BY_CLASS, useSpecTranslations } from '../../data/Specs'
 
 interface SpecSelectProps {
   charClass: Class | ''
@@ -13,6 +13,7 @@ interface SpecSelectProps {
 
 export const SpecMultiSelect = ({ charClass, specs, setSpecs }: SpecSelectProps) => {
   const { t } = useTranslation()
+  const specTranslations = useSpecTranslations()
   const disabled = !charClass
 
   const handleChange = (value: Spec[]) => {
@@ -30,7 +31,7 @@ export const SpecMultiSelect = ({ charClass, specs, setSpecs }: SpecSelectProps)
             `}
           >
             {specs.length > 0 ? (
-              specs.map((s) => SPEC_TRANSLATION_KEYS[s]).join(', ')
+              specs.map((s) => specTranslations[s]).join(', ')
             ) : (
               <span className="text-zinc-500">{t('modal.newCharacter.spec.placeholder')}</span>
             )}
@@ -68,7 +69,7 @@ export const SpecMultiSelect = ({ charClass, specs, setSpecs }: SpecSelectProps)
                         <span className="w-4 h-4 shrink-0" />
                       )}
                       <span className={selected ? 'font-medium text-white' : 'text-white'}>
-                        {SPEC_TRANSLATION_KEYS[spec]}
+                        {specTranslations[spec]}
                       </span>
                     </>
                   )}
