@@ -66,14 +66,14 @@ export const EditPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) 
           <div className="flex justify-end gap-3 pt-4">
             <button
               onClick={handleClose}
-              className="text-sm text-zinc-400 hover:text-white transition"
+              className="text-sm text-zinc-400 hover:text-white transition cursor-pointer"
             >
               {t('modal.cancel')}
             </button>
             <button
               onClick={handleSave}
               disabled={!name.trim()}
-              className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {t('modal.save')}
             </button>

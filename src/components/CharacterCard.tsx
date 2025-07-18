@@ -1,10 +1,11 @@
 import { Switch } from '@headlessui/react'
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CLASSES } from '../data/Class'
 import { Character } from '../models/Character'
+import { ConfirmModal } from './modals/ConfirmModal'
 import { EditCharacterModal } from './modals/EditCharacterModal'
 import { EditKeystoneModal } from './modals/EditKeystoneModal'
 
@@ -13,6 +14,7 @@ interface CharacterBadgeProps {
   onToggleActive: () => void
   onUpdateChar: (char: Character) => void
   onUpdateKeystone: (newKeystone: Character['keystone']) => void
+  onDeleteChar: () => void
 }
 
 export const CharacterCard = ({
@@ -20,9 +22,11 @@ export const CharacterCard = ({
   onToggleActive,
   onUpdateKeystone,
   onUpdateChar,
+  onDeleteChar,
 }: CharacterBadgeProps) => {
   const { t } = useTranslation()
   const [keystoneModalOpen, setKeystoneModalOpen] = useState(false)
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
 
   return (
@@ -63,6 +67,14 @@ export const CharacterCard = ({
           >
             <Pencil className="w-4 h-4" />
           </button>
+
+          <button
+            onClick={() => setDeleteConfirmationModalOpen(true)}
+            className="p-1 h-6 w-6 rounded hover:text-white text-zinc-400 hover:bg-red-900 transition cursor-pointer"
+            title={t('tooltip.deleteCharacter')}
+          >
+            <Trash className="w-4 h-4" />
+          </button>
         </div>
         <Switch
           checked={char.active}
@@ -79,7 +91,6 @@ export const CharacterCard = ({
         </Switch>
       </div>
 
-      {/* Keystone Modal */}
       <EditKeystoneModal
         open={keystoneModalOpen}
         onClose={() => setKeystoneModalOpen(false)}
@@ -94,11 +105,20 @@ export const CharacterCard = ({
       <EditCharacterModal
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        onSave={(char) => {
-          console.log(char)
-          onUpdateChar(char)
-        }}
+        onSave={onUpdateChar}
         character={char}
+        mode="edit"
+      />
+
+      <ConfirmModal
+        open={deleteConfirmationModalOpen}
+        onClose={() => setDeleteConfirmationModalOpen(false)}
+        onSave={onDeleteChar}
+        title={t('confirm.modal.delete.char.title')}
+        bodyText={t('confirm.modal.delete.char.description')}
+        yesLabel={t('confirm.modal.delete.char.delete')}
+        noLabel={t('confirm.modal.delete.char.cancel')}
+        yesBtnClassNames={'bg-red-900 hover:bg-red-700'}
       />
     </div>
   )

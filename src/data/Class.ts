@@ -29,3 +29,19 @@ export const CLASSES = [
   { id: Class.Warlock, label: 'Warlock' },
   { id: Class.Warrior, label: 'Warrior' },
 ]
+
+export const CLASS_ICONS: Record<Class, string> = {
+  [Class.DeathKnight]: ':deathknight:',
+  [Class.DemonHunter]: ':demonhunter:',
+  [Class.Druid]: ':druid:',
+  [Class.Evoker]: ':evoker:',
+  [Class.Hunter]: ':hunter:',
+  [Class.Mage]: ':mage:',
+  [Class.Monk]: ':monk:',
+  [Class.Paladin]: ':paladin:',
+  [Class.Priest]: ':priest:',
+  [Class.Rogue]: ':rogue:',
+  [Class.Shaman]: ':shaman:',
+  [Class.Warlock]: ':warlock:',
+  [Class.Warrior]: ':warrior:',
+}

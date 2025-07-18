@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { AddNewPlayerCard } from './components/AddNewPlayerCard'
 import { MarkdownOutput } from './components/MarkdownOutput'
@@ -6,9 +6,11 @@ import { EditPlayerModal } from './components/modals/EditPlayerModal'
 import { PlayerCard } from './components/PlayerCard'
 import { Class } from './data/Class'
 import { DungeonId } from './data/Dungeons'
+import { Faction } from './data/Faction'
 import { Role } from './data/Roles'
 import { Spec } from './data/Specs'
 import { Player } from './models/Player'
+import { DiscordFormatService } from './services/DiscordFormatService'
 
 export default function App() {
   const test: Player[] = [
@@ -20,11 +22,14 @@ export default function App() {
         {
           name: 'Nerfblaster',
           realm: 'Blackhand',
+          rioScore: 3300,
           active: true,
           class: Class.Hunter,
           iLvl: 682,
+          keystoneAvailable: true,
           keystone: { dungeon: DungeonId.ML, level: 12 },
           roles: [Role.DPS],
+          faction: Faction.Horde,
           source: 'manual',
           specs: [Spec.Marksmanship],
         },
@@ -33,13 +38,18 @@ export default function App() {
   ]
 
   const [players, setPlayers] = useState<Player[]>(test)
+  const [output, setOutput] = useState<string>()
   const [showModal, setShowModal] = useState(false)
-  function AddNewPlayer(name: string, discord?: string) {
-    console.log('AddNewPlayer', name, discord)
+  const AddNewPlayer = (name: string, discord?: string) => {
     const highestId = Math.max(...players.map((o) => o.id))
-    const newId = highestId != Infinity ? highestId + 1 : 0
+    const newId = highestId != -Infinity ? highestId + 1 : 0
     setPlayers([...players, { id: newId, name: name, discord: discord, characters: [] }])
   }
+
+  useEffect(() => {
+    console.log('new output')
+    setOutput(DiscordFormatService.formatTeam(players))
+  }, [players])
 
   return (
     <div className={'flex flex-col w-full flex-1 gap-8'}>
@@ -48,9 +58,10 @@ export default function App() {
         <div className={'flex flex-row min-h-[30rem] gap-2'}>
           {players.map((player) => (
             <PlayerCard
-              key={player.name}
+              key={player.id}
               player={player}
-              onUpdatePlayer={(player) => {
+              onUpdatePlayer={() => {
+                console.log('update', player)
                 const idx = players.findIndex((p) => {
                   return p.id === player.id
                 })
@@ -60,9 +71,20 @@ export default function App() {
                   setPlayers([...players])
                 }
               }}
+              onDeletePlayer={() => {
+                console.log('Deleting player', player)
+                const idx = players.findIndex((p) => {
+                  return p.id === player.id
+                })
+
+                if (idx >= 0 && players.length > idx) {
+                  players.splice(idx, 1)
+                  setPlayers([...players])
+                }
+              }}
             />
           ))}
-          <AddNewPlayerCard onClick={() => setShowModal(true)} />
+          {players.length < 4 && <AddNewPlayerCard onClick={() => setShowModal(true)} />}
 
           <EditPlayerModal
             open={showModal}
@@ -74,7 +96,7 @@ export default function App() {
 
       <div>
         <h2>Output</h2>
-        <MarkdownOutput value={'TEST'} className={'max-w-[50rem]'} />
+        <MarkdownOutput value={output} className={'max-w-[60rem]'} />
       </div>
     </div>
   )

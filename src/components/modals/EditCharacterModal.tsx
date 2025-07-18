@@ -1,10 +1,11 @@
-import { Dialog, Switch } from '@headlessui/react'
+import { Dialog, Field, Label, Switch } from '@headlessui/react'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Class } from '../../data/Class'
 import { DungeonId, Dungeons } from '../../data/Dungeons'
+import { Faction } from '../../data/Faction'
 import { Role } from '../../data/Roles'
 import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
 import { Character } from '../../models/Character'
@@ -42,23 +43,29 @@ export const EditCharacterModal = ({
 
   const [name, setName] = useState(character?.name ?? '')
   const [realm, setRealm] = useState(character?.realm ?? '')
+  const [faction, setFaction] = useState(character?.faction ?? Faction.Horde)
   const [charClass, setCharClass] = useState<Class>(character?.class ?? Class.Hunter)
   const [specs, setSpecs] = useState<Spec[]>(character?.specs ?? [Spec.BeastMastery])
   const [ilvl, setIlvl] = useState(character?.iLvl ?? 680)
+  const [keystoneAvailable, setKeystoneAvailable] = useState(character?.keystoneAvailable ?? true)
   const [keystoneLevel, setKeystoneLevel] = useState(character?.keystone.level ?? 12)
   const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(
     character?.keystone.dungeon ?? DungeonId.DFC
   )
+  const [rioScore, setRioScore] = useState(character?.rioScore ?? 0)
   const [active, setActive] = useState(character?.active !== undefined ? character.active : true)
 
   const resetData = () => {
     setName(character?.name ?? '')
     setRealm(character?.realm ?? '')
+    setFaction(character?.faction ?? Faction.Horde)
     setCharClass(character?.class ?? Class.Hunter)
     setSpecs(character?.specs ?? [Spec.BeastMastery])
     setIlvl(character?.iLvl ?? 680)
+    setKeystoneAvailable(character?.keystoneAvailable ?? true)
     setKeystoneLevel(character?.keystone.level ?? 12)
     setKeystoneDungeon(character?.keystone.dungeon ?? DungeonId.DFC)
+    setRioScore(character?.rioScore ?? 0)
     setActive(true)
   }
 
@@ -87,7 +94,10 @@ export const EditCharacterModal = ({
       roles: roles,
       iLvl: ilvl,
       source: 'manual',
+      faction: faction,
+      rioScore: rioScore,
       active,
+      keystoneAvailable: keystoneAvailable,
       keystone: { level: keystoneLevel, dungeon: keystoneDungeon },
     })
     handleClose(mode == 'create')
@@ -100,10 +110,10 @@ export const EditCharacterModal = ({
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
           <Dialog.Title className="text-lg font-semibold">
             <div className="flex justify-between items-center">
-              {t('modal.newCharacter.title')}
+              {t(mode == 'edit' ? 'modal.editCharacter.title' : 'modal.newCharacter.title')}
               <button
                 onClick={() => handleClose(true)}
-                className="text-zinc-400 hover:text-white transition"
+                className="text-zinc-400 hover:text-white transition cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -128,6 +138,15 @@ export const EditCharacterModal = ({
             />
           </div>
 
+          <FloatingInput
+            id="rio"
+            label={t('modal.newCharacter.rioScore.label')}
+            value={rioScore}
+            type="number"
+            onChange={(e) => setRioScore(parseInt(e.target.value))}
+            required={true}
+          />
+
           <FloatingSelect
             id="char-class"
             label={t('modal.newCharacter.class.label')}
@@ -147,6 +166,28 @@ export const EditCharacterModal = ({
             required={true}
           />
 
+          <Field>
+            <div className="flex items-center gap-3">
+              <Switch
+                id={'keystone-available'}
+                checked={keystoneAvailable}
+                onChange={setKeystoneAvailable}
+                className={`${
+                  keystoneAvailable ? 'bg-blue-600' : 'bg-zinc-700'
+                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+              >
+                <span
+                  className={`${
+                    keystoneAvailable ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                />
+              </Switch>
+              <Label className="text-sm text-white">
+                {t('modal.newCharacter.keystone.available')}
+              </Label>
+            </div>
+          </Field>
+
           <div className="flex gap-4">
             <FloatingInput
               id="keystone-level"
@@ -156,6 +197,7 @@ export const EditCharacterModal = ({
               className={'flex-1'}
               onChange={(e) => setKeystoneLevel(Number(e.target.value))}
               required={true}
+              disabled={!keystoneAvailable}
             />
             <FloatingSelect
               id="keystone-dungeon"
@@ -165,12 +207,14 @@ export const EditCharacterModal = ({
               onChange={(e) => setKeystoneDungeon(e.target.value as DungeonId)}
               options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
               required={true}
+              disabled={!keystoneAvailable}
             />
           </div>
 
-          <Switch.Group>
+          <Field>
             <div className="flex items-center gap-3">
               <Switch
+                id={'active'}
                 checked={active}
                 onChange={setActive}
                 className={`${
@@ -183,16 +227,14 @@ export const EditCharacterModal = ({
                   } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </Switch>
-              <Switch.Label className="text-sm text-white">
-                {t('modal.newCharacter.active')}
-              </Switch.Label>
+              <Label className="text-sm text-white">{t('modal.newCharacter.active')}</Label>
             </div>
-          </Switch.Group>
+          </Field>
 
           <div className="flex justify-end gap-3 pt-4">
             <button
               onClick={() => handleClose(true)}
-              className="text-sm text-zinc-400 hover:text-white transition"
+              className="text-sm text-zinc-400 hover:text-white transition cursor-pointer"
             >
               {t('modal.cancel')}
             </button>
@@ -207,7 +249,7 @@ export const EditCharacterModal = ({
                 !keystoneDungeon ||
                 !ilvl
               }
-              className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {t('modal.save')}
             </button>

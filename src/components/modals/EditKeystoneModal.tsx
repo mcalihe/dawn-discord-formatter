@@ -49,7 +49,7 @@ export const EditKeystoneModal = ({
               {t('modal.editKeystone.title', 'Edit Keystone')}
               <button
                 onClick={onClose}
-                className="text-zinc-400 hover:text-white transition"
+                className="text-zinc-400 hover:text-white transition cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />

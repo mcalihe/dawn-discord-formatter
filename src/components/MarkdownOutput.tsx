@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface MarkdownOutputProps {
-  value: string
+  value?: string
   className: string
 }
 
@@ -15,7 +15,7 @@ export const MarkdownOutput = ({ value, className }: MarkdownOutputProps) => {
   let timeout: NodeJS.Timeout | null = null
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(value)
+    navigator.clipboard.writeText(value || '')
     setCopied(true)
     if (timeout) {
       clearTimeout(timeout)
