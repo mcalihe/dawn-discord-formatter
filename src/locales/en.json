@@ -22,7 +22,7 @@
   "modal.newCharacter.class.label": "Class",
   "modal.newCharacter.ilvl.label": "Item level",
   "modal.newCharacter.keystone.available": "Keystone available",
-  "modal.newCharacter.keystone.level": "Keystone level",
+  "modal.newCharacter.keystone.level": "Level",
   "modal.newCharacter.keystone.dungeon": "Dungeon",
   "modal.newCharacter.trade.all": "Trade all armor types",
   "modal.newCharacter.active": "Active",
