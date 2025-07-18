@@ -99,10 +99,11 @@ export class DiscordFormatService {
         const roleCol = role
         const classCol = (classIcon + ' ' + classTranslations[char.class]).padEnd(classWidth, ' ')
         const factionCol = faction
-        const dungeonCol = `:Keystone: +${char.keystone.level} ${dungeon}`.padEnd(
-          dungeonWidth,
-          '  '
-        )
+
+        const keystone = char.keystoneAvailable
+          ? `:Keystone: +${char.keystone.level} ${dungeon}`
+          : `:Keystone: ${translateFn('keystone.not.available')}`
+        const dungeonCol = keystone.padEnd(dungeonWidth, '  ')
         const ilvlCol = `:gear: ${char.iLvl}`.padEnd(ilvlWidth, ' ')
         const armorCol = `:Armor: ${armor}`
         const rioCol = `:Raiderio: ${this.formatScore(char.rioScore)}`
@@ -117,4 +118,5 @@ export const KEYS_FOR_MARKING = [
   i18n.t('trade.all.armor'),
   i18n.t('trade.all.armor.except'),
   i18n.t('no.players.active'),
+  i18n.t('keystone.not.available'),
 ]
