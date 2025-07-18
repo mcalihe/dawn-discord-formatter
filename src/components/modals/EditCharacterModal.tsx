@@ -3,17 +3,17 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Class, CLASS_TRANSLATIONS } from '../../data/Class'
+import { Class, useClassTranslations } from '../../data/Class'
 import { DUNGEON_TRANSLATION_KEYS, DungeonId } from '../../data/Dungeons'
 import { Faction } from '../../data/Faction'
 import { Role } from '../../data/Roles'
 import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
 import { Character } from '../../models/Character'
-import { ArmorMultiSelect } from '../ArmorMultiSelect'
-import { FactionRadioGroup } from '../FactionRadioGroup'
-import { FloatingInput } from '../FloatingInput'
-import { FloatingSelect } from '../FloatingSelect'
-import { SpecMultiSelect } from '../SpecMultiSelect'
+import { ArmorMultiSelect } from '../controls/ArmorMultiSelect'
+import { FactionRadioGroup } from '../controls/FactionRadioGroup'
+import { FloatingInput } from '../controls/FloatingInput'
+import { FloatingSelect } from '../controls/FloatingSelect'
+import { SpecMultiSelect } from '../controls/SpecMultiSelect'
 
 interface NewCharacterModalProps {
   open: boolean
@@ -23,11 +23,6 @@ interface NewCharacterModalProps {
   mode: 'create' | 'edit'
 }
 
-const CLASS_OPTIONS = Object.entries(CLASS_TRANSLATIONS).map(([key, label]) => ({
-  value: key,
-  label,
-}))
-
 export const EditCharacterModal = ({
   open,
   onClose,
@@ -36,6 +31,12 @@ export const EditCharacterModal = ({
   mode = 'edit',
 }: NewCharacterModalProps) => {
   const { t } = useTranslation()
+  const classTranslations = useClassTranslations()
+
+  const CLASS_OPTIONS = Object.entries(classTranslations).map(([key, label]) => ({
+    value: key,
+    label,
+  }))
 
   const [name, setName] = useState(character?.name ?? '')
   const [realm, setRealm] = useState(character?.realm ?? '')

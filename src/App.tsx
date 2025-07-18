@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { AddNewPlayerCard } from './components/AddNewPlayerCard'
+import { AddNewPlayerCard } from './components/cards/AddNewPlayerCard'
+import { PlayerCard } from './components/cards/PlayerCard'
+import { LanguageSwitcher } from './components/controls/LanguageSwitcher'
 import { Footer } from './components/Footer'
 import { MarkdownOutput } from './components/MarkdownOutput'
 import { EditPlayerModal } from './components/modals/EditPlayerModal'
-import { PlayerCard } from './components/PlayerCard'
-import { Class } from './data/Class'
+import { Class, useClassTranslations } from './data/Class'
 import { DungeonId } from './data/Dungeons'
 import { Faction } from './data/Faction'
 import { Role } from './data/Roles'
@@ -39,6 +40,7 @@ export default function App() {
       ],
     },
   ]
+  const classTranslations = useClassTranslations()
 
   const [players, setPlayers] = useState<Player[]>(test)
   const [output, setOutput] = useState<string>()
@@ -50,14 +52,16 @@ export default function App() {
   }
 
   useEffect(() => {
-    console.log('new output')
-    setOutput(DiscordFormatService.formatTeam(players))
+    setOutput(DiscordFormatService.formatTeam(players, classTranslations))
   }, [players])
 
   return (
     <div className={'flex flex-col w-full flex-1 gap-8'}>
       <div className={'flex flex-col gap-8'}>
-        <h1>Dawn Discord Formatter</h1>
+        <div className={'flex flex-row justify-between w-full gap-8'}>
+          <h1>Dawn Discord Formatter</h1>
+          <LanguageSwitcher />
+        </div>
         <div className={'flex flex-row min-h-[30rem] gap-2'}>
           {players.map((player) => (
             <PlayerCard

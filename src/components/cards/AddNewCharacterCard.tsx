@@ -5,7 +5,7 @@ interface AddNewCharacterBadgeProps {
   onClick: () => void
 }
 
-export const AddNewCharacterBadge = ({ onClick }: AddNewCharacterBadgeProps) => {
+export const AddNewCharacterCard = ({ onClick }: AddNewCharacterBadgeProps) => {
   const { t } = useTranslation()
 
   return (

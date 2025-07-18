@@ -2,7 +2,7 @@ import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 
-import { Faction, FACTION_TRANSLATION_KEYS } from '../data/Faction'
+import { Faction, FACTION_TRANSLATION_KEYS } from '../../data/Faction'
 
 interface FactionRadioGroupProps {
   value: Faction

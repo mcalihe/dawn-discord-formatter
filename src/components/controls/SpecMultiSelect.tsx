@@ -2,26 +2,25 @@ import { Listbox } from '@headlessui/react'
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { ARMOR_SLOT_TRANSLATIONS, ArmorSlot } from '../data/AmorSlot'
+import { Class } from '../../data/Class'
+import { Spec, SPEC_TRANSLATION_KEYS, SPECS_BY_CLASS } from '../../data/Specs'
 
 interface SpecSelectProps {
-  disabled: boolean
-  armorSlots: ArmorSlot[]
-  setArmorSlots: (value: ArmorSlot[]) => void
+  charClass: Class | ''
+  specs: Spec[]
+  setSpecs: (value: Spec[]) => void
 }
-const ARMOR_OPTIONS = Object.values(ArmorSlot).map((slot) => ({
-  value: slot,
-  label: slot.charAt(0).toUpperCase() + slot.slice(1), // z.B. "head" -> "Head"
-}))
-export const ArmorMultiSelect = ({ disabled, armorSlots, setArmorSlots }: SpecSelectProps) => {
-  const { t } = useTranslation()
 
-  const handleChange = (value: ArmorSlot[]) => {
-    setArmorSlots(value)
+export const SpecMultiSelect = ({ charClass, specs, setSpecs }: SpecSelectProps) => {
+  const { t } = useTranslation()
+  const disabled = !charClass
+
+  const handleChange = (value: Spec[]) => {
+    setSpecs(value)
   }
 
   return (
-    <Listbox as="div" value={armorSlots} onChange={handleChange} multiple disabled={disabled}>
+    <Listbox as="div" value={specs} onChange={handleChange} multiple disabled={disabled}>
       {({ open }) => (
         <div className="relative w-full" title={disabled ? t('tooltip.selectClassFirst') : ''}>
           <Listbox.Button
@@ -30,37 +29,35 @@ export const ArmorMultiSelect = ({ disabled, armorSlots, setArmorSlots }: SpecSe
               ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             `}
           >
-            {armorSlots.length > 0 ? (
-              armorSlots.map((at) => ARMOR_SLOT_TRANSLATIONS[at]).join(', ')
+            {specs.length > 0 ? (
+              specs.map((s) => SPEC_TRANSLATION_KEYS[s]).join(', ')
             ) : (
-              <span className="text-zinc-500">
-                {t('modal.newCharacter.cant.trade.placeholder')}
-              </span>
+              <span className="text-zinc-500">{t('modal.newCharacter.spec.placeholder')}</span>
             )}
           </Listbox.Button>
 
           <label
             className="absolute left-2 top-0 text-zinc-400 text-sm transition-all
-    peer-placeholder-shown:top-3
-    peer-placeholder-shown:text-base
-    peer-placeholder-shown:text-zinc-500
-    peer-focus:top-0
-    peer-focus:text-sm
-    peer-focus:text-blue-400"
+              peer-placeholder-shown:top-3
+              peer-placeholder-shown:text-base
+              peer-placeholder-shown:text-zinc-500
+              peer-focus:top-0
+              peer-focus:text-sm
+              peer-focus:text-blue-400"
           >
-            {t('modal.newCharacter.cant.trade.label')}
+            {t('modal.newCharacter.spec.label')}
           </label>
 
-          {open && !disabled && (
+          {open && charClass && (
             <Listbox.Options className="absolute z-10 mt-1 w-full rounded bg-zinc-800 border border-zinc-700 shadow-lg max-h-60 overflow-auto focus:outline-none text-sm">
-              {ARMOR_OPTIONS.map(({ value, label }) => (
+              {SPECS_BY_CLASS[charClass].map(({ spec }) => (
                 <Listbox.Option
-                  key={value}
-                  value={value}
+                  key={spec}
+                  value={spec}
                   className={({ active, selected }) =>
                     `relative px-4 py-2 cursor-pointer select-none flex items-center gap-2 rounded
-          ${selected ? 'bg-blue-500/10' : ''}
-          ${active ? 'bg-blue-600/20' : ''}`
+                    ${selected ? 'bg-blue-500/10' : ''}
+                    ${active ? 'bg-blue-600/20' : ''}`
                   }
                 >
                   {({ selected }) => (
@@ -71,7 +68,7 @@ export const ArmorMultiSelect = ({ disabled, armorSlots, setArmorSlots }: SpecSe
                         <span className="w-4 h-4 shrink-0" />
                       )}
                       <span className={selected ? 'font-medium text-white' : 'text-white'}>
-                        {label}
+                        {SPEC_TRANSLATION_KEYS[spec]}
                       </span>
                     </>
                   )}

@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FloatingInput } from '../FloatingInput'
+import { FloatingInput } from '../controls/FloatingInput'
 
 interface NewPlayerModalProps {
   open: boolean

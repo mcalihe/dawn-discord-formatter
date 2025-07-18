@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DUNGEON_TRANSLATION_KEYS, DungeonId } from '../../data/Dungeons'
-import { FloatingInput } from '../FloatingInput'
-import { FloatingSelect } from '../FloatingSelect'
+import { FloatingInput } from '../controls/FloatingInput'
+import { FloatingSelect } from '../controls/FloatingSelect'
 
 interface EditKeystoneModalProps {
   open: boolean

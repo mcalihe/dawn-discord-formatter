@@ -4,11 +4,11 @@ import { Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CLASS_TRANSLATIONS } from '../data/Class'
-import { Character } from '../models/Character'
-import { ConfirmModal } from './modals/ConfirmModal'
-import { EditCharacterModal } from './modals/EditCharacterModal'
-import { EditKeystoneModal } from './modals/EditKeystoneModal'
+import { useClassTranslations } from '../../data/Class'
+import { Character } from '../../models/Character'
+import { ConfirmModal } from '../modals/ConfirmModal'
+import { EditCharacterModal } from '../modals/EditCharacterModal'
+import { EditKeystoneModal } from '../modals/EditKeystoneModal'
 
 interface CharacterBadgeProps {
   char: Character
@@ -24,6 +24,8 @@ export const CharacterCard = ({
   onDeleteChar,
 }: CharacterBadgeProps) => {
   const { t } = useTranslation()
+  const classTranslations = useClassTranslations()
+
   const [keystoneModalOpen, setKeystoneModalOpen] = useState(false)
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -43,7 +45,7 @@ export const CharacterCard = ({
             {char.name} • {char.realm}{' '}
           </span>
           <span className="text-xs">
-            {CLASS_TRANSLATIONS[char.class]} • {char.roles.join(', ')}
+            {classTranslations[char.class]} • {char.roles.join(', ')}
           </span>
         </div>
         <button

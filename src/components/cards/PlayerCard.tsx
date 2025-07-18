@@ -2,13 +2,13 @@ import { Pencil, Trash, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Character } from '../models/Character'
-import { Player } from '../models/Player'
-import { AddNewCharacterBadge } from './AddNewCharacterBadge'
+import { Character } from '../../models/Character'
+import { Player } from '../../models/Player'
+import { ConfirmModal } from '../modals/ConfirmModal'
+import { EditCharacterModal } from '../modals/EditCharacterModal'
+import { EditPlayerModal } from '../modals/EditPlayerModal'
+import { AddNewCharacterCard } from './AddNewCharacterCard'
 import { CharacterCard } from './CharacterCard'
-import { ConfirmModal } from './modals/ConfirmModal'
-import { EditCharacterModal } from './modals/EditCharacterModal'
-import { EditPlayerModal } from './modals/EditPlayerModal'
 
 type PlayerCardProps = {
   player: Player
@@ -71,7 +71,7 @@ export const PlayerCard = ({ player, onUpdatePlayer, onDeletePlayer }: PlayerCar
               }}
             />
           ))}
-          <AddNewCharacterBadge onClick={() => setShowModal(true)} />
+          <AddNewCharacterCard onClick={() => setShowModal(true)} />
           <EditCharacterModal
             mode={'create'}
             open={showModal}

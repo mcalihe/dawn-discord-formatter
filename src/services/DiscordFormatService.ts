@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 
 import { ARMOR_SLOT_TRANSLATIONS } from '../data/AmorSlot'
-import { CLASS_ICONS, CLASS_TRANSLATIONS } from '../data/Class'
+import { Class, CLASS_ICONS } from '../data/Class'
 import { FACTION_ICONS } from '../data/Faction'
 import { ROLE_ICONS } from '../data/Roles'
 import { Character } from '../models/Character'
@@ -18,7 +18,7 @@ export class DiscordFormatService {
     return (Math.round(score / 100) / 10).toFixed(1) + 'k'
   }
 
-  static formatTeam(players: Player[]): string {
+  static formatTeam(players: Player[], classTranslations: Record<Class, string>): string {
     const activePlayers = players.filter((p) => p.characters.filter((c) => c.active).length > 0)
     if (activePlayers.length < 1) {
       return i18n.t('no.players.active')
@@ -27,13 +27,19 @@ export class DiscordFormatService {
     const header = groupSizeLabels[activePlayers.length]
     let output = header + (activePlayers.length === 1 ? ' ' : '\n')
     const playerDescriptions = activePlayers
-      .map((p, idx) => this.formatPlayer(p, activePlayers.length === 1 ? undefined : idx + 1))
+      .map((p, idx) =>
+        this.formatPlayer(p, classTranslations, activePlayers.length === 1 ? undefined : idx + 1)
+      )
       .join('\n')
     output += playerDescriptions + '\n'
     return output
   }
 
-  static formatPlayer(player: Player, number?: number): string {
+  static formatPlayer(
+    player: Player,
+    classTranslations: Record<Class, string>,
+    number?: number
+  ): string {
     if (player.characters.length < 1) {
       return ''
     }
@@ -45,12 +51,14 @@ export class DiscordFormatService {
     const playerInfo = number ? `Player${number} ` : ''
     const playerDiscord = player.discord !== undefined ? `@${player.discord} ` : ''
     const header = `${playerInfo}${playerDiscord}:Raiderio: ${highestScore}`
-    const characterLines = player.characters.filter((c) => c.active).map(this.formatCharacterLine)
+    const characterLines = player.characters
+      .filter((c) => c.active)
+      .map((c) => this.formatCharacterLine(c, classTranslations))
 
     return [header, ...characterLines].join('\n')
   }
 
-  static formatCharacterLine(char: Character): string {
+  static formatCharacterLine(char: Character, classTranslations: Record<Class, string>): string {
     const classIcon = CLASS_ICONS[char.class] ?? ':question:'
     const faction = FACTION_ICONS[char.faction]
     const dungeon = char.keystone.dungeon
@@ -64,7 +72,7 @@ export class DiscordFormatService {
     return roleIcons
       .map(
         (role) =>
-          `${role} ${classIcon} ${faction} ${CLASS_TRANSLATIONS[char.class]} :Keystone: +${char.keystone.level} ${dungeon} :gear: ${char.iLvl} :Armor: ${armor}`
+          `${role} ${classIcon} ${faction} ${classTranslations[char.class]} :Keystone: +${char.keystone.level} ${dungeon} :gear: ${char.iLvl} :Armor: ${armor}`
       )
       .join('\n')
   }

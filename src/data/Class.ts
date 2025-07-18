@@ -1,4 +1,4 @@
-import i18n from '../i18n'
+import { useTranslation } from 'react-i18next'
 
 export enum Class {
   DeathKnight = 'death-knight',
@@ -16,20 +16,24 @@ export enum Class {
   Warrior = 'warrior',
 }
 
-export const CLASS_TRANSLATIONS: Record<Class, string> = {
-  [Class.DeathKnight]: i18n.t('class.deathKnight'),
-  [Class.DemonHunter]: i18n.t('class.demonHunter'),
-  [Class.Druid]: i18n.t('class.druid'),
-  [Class.Evoker]: i18n.t('class.evoker'),
-  [Class.Hunter]: i18n.t('class.hunter'),
-  [Class.Mage]: i18n.t('class.mage'),
-  [Class.Monk]: i18n.t('class.monk'),
-  [Class.Paladin]: i18n.t('class.paladin'),
-  [Class.Priest]: i18n.t('class.priest'),
-  [Class.Rogue]: i18n.t('class.rogue'),
-  [Class.Shaman]: i18n.t('class.shaman'),
-  [Class.Warlock]: i18n.t('class.warlock'),
-  [Class.Warrior]: i18n.t('class.warrior'),
+export function useClassTranslations(): Record<Class, string> {
+  const { t } = useTranslation()
+
+  return {
+    [Class.DeathKnight]: t('class.deathKnight'),
+    [Class.DemonHunter]: t('class.demonHunter'),
+    [Class.Druid]: t('class.druid'),
+    [Class.Evoker]: t('class.evoker'),
+    [Class.Hunter]: t('class.hunter'),
+    [Class.Mage]: t('class.mage'),
+    [Class.Monk]: t('class.monk'),
+    [Class.Paladin]: t('class.paladin'),
+    [Class.Priest]: t('class.priest'),
+    [Class.Rogue]: t('class.rogue'),
+    [Class.Shaman]: t('class.shaman'),
+    [Class.Warlock]: t('class.warlock'),
+    [Class.Warrior]: t('class.warrior'),
+  }
 }
 
 export const CLASS_ICONS: Record<Class, string> = {
