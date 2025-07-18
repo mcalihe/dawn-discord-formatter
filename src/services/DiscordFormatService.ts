@@ -88,13 +88,15 @@ export class DiscordFormatService {
           .map((at) => armorSlotTranslations[at])
           .join(', ')}`
 
-    const roleIcons = char.roles.map((r) => ROLE_ICONS[r] ?? ':grey_question:')
+    const roleIcons = [...new Set(char.roles)].map((r) => ROLE_ICONS[r])
     return roleIcons
       .map(
         (role) =>
           `${role} ${classIcon} ${faction} ${classTranslations[char.class]} :Keystone: +${char.keystone.level} ${dungeon} :gear: ${char.iLvl} :Armor: ${armor}`
       )
       .join('\n')
+
+    // TODO: Data structure and then order before print!
   }
 }
 
