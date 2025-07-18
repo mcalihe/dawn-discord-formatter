@@ -96,11 +96,12 @@ export default function App() {
 
   const onDeleteTeam = (team: string) => {
     delete teams[team]
-    setTeams(teams)
+    setTeams({ ...teams })
 
     if (Object.keys(teams).length <= 0) {
       teams[NEW_TEAM_NAME] = []
     }
+    setCurrentTeamKey(Object.keys(teams)[0])
   }
 
   useEffect(() => {
