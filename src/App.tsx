@@ -107,7 +107,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    console.log('save')
     localStorage.setItem(TEAMS, JSON.stringify(teams))
   }, [players, teams])
 
@@ -202,7 +201,6 @@ export default function App() {
               key={player.id}
               player={player}
               onUpdatePlayer={() => {
-                console.log('update', player)
                 const idx = players.findIndex((p) => {
                   return p.id === player.id
                 })

@@ -102,7 +102,6 @@ export const CharacterCard = ({
         open={keystoneModalOpen}
         onClose={() => setKeystoneModalOpen(false)}
         onSave={(data) => {
-          console.log(data)
           char.keystone = data
           char.keystoneAvailable = data.keystoneAvailable
           onUpdateChar(char)

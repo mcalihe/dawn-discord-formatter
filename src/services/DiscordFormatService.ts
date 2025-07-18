@@ -89,14 +89,27 @@ export class DiscordFormatService {
           .join(', ')}`
 
     const roleIcons = [...new Set(char.roles)].map((r) => ROLE_ICONS[r])
-    return roleIcons
-      .map(
-        (role) =>
-          `${role} ${classIcon} ${faction} ${classTranslations[char.class]} :Keystone: +${char.keystone.level} ${dungeon} :gear: ${char.iLvl} :Armor: ${armor}`
-      )
-      .join('\n')
 
-    // TODO: Data structure and then order before print!
+    const classWidth = 40
+    const dungeonWidth = 25
+    const ilvlWidth = 12
+
+    return roleIcons
+      .map((role) => {
+        const roleCol = role
+        const classCol = (classIcon + ' ' + classTranslations[char.class]).padEnd(classWidth, ' ')
+        const factionCol = faction
+        const dungeonCol = `:Keystone: +${char.keystone.level} ${dungeon}`.padEnd(
+          dungeonWidth,
+          '  '
+        )
+        const ilvlCol = `:gear: ${char.iLvl}`.padEnd(ilvlWidth, ' ')
+        const armorCol = `:Armor: ${armor}`
+        const rioCol = `:Raiderio: ${this.formatScore(char.rioScore)}`
+
+        return `${roleCol} ${factionCol}${classCol} ${dungeonCol} ${ilvlCol} ${rioCol} ${armorCol}`
+      })
+      .join('\n')
   }
 }
 
