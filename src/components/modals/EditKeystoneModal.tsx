@@ -1,4 +1,4 @@
-import { Dialog } from '@headlessui/react'
+import { Dialog, Field, Label, Switch } from '@headlessui/react'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,8 @@ import { FloatingSelect } from '../FloatingSelect'
 interface EditKeystoneModalProps {
   open: boolean
   onClose: () => void
-  onSave: (data: { level: number; dungeon: DungeonId }) => void
+  onSave: (data: { level: number; dungeon: DungeonId; keystoneAvailable: boolean }) => void
+  initialKeystoneAvailable: boolean
   initialLevel: number
   initialDungeon: DungeonId
 }
@@ -19,11 +20,13 @@ export const EditKeystoneModal = ({
   open,
   onClose,
   onSave,
+  initialKeystoneAvailable,
   initialLevel,
   initialDungeon,
 }: EditKeystoneModalProps) => {
   const { t } = useTranslation()
 
+  const [keystoneAvailable, setKeystoneAvailable] = useState(initialKeystoneAvailable)
   const [level, setLevel] = useState(initialLevel)
   const [dungeon, setDungeon] = useState<DungeonId>(initialDungeon)
 
@@ -31,11 +34,12 @@ export const EditKeystoneModal = ({
     if (open) {
       setLevel(initialLevel)
       setDungeon(initialDungeon)
+      setKeystoneAvailable(initialKeystoneAvailable)
     }
   }, [open, initialLevel, initialDungeon])
 
   const handleSave = () => {
-    onSave({ level, dungeon })
+    onSave({ level, dungeon, keystoneAvailable })
     onClose()
   }
 
@@ -57,6 +61,28 @@ export const EditKeystoneModal = ({
             </div>
           </Dialog.Title>
 
+          <Field>
+            <div className="flex items-center gap-3">
+              <Switch
+                id={'keystone-available'}
+                checked={keystoneAvailable}
+                onChange={setKeystoneAvailable}
+                className={`${
+                  keystoneAvailable ? 'bg-blue-600' : 'bg-zinc-700'
+                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+              >
+                <span
+                  className={`${
+                    keystoneAvailable ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                />
+              </Switch>
+              <Label className="text-sm text-white">
+                {t('modal.newCharacter.keystone.available')}
+              </Label>
+            </div>
+          </Field>
+
           <div className="flex gap-4">
             <FloatingInput
               id="keystone-level"
@@ -65,7 +91,8 @@ export const EditKeystoneModal = ({
               value={level}
               className={'flex-1'}
               onChange={(e) => setLevel(Number(e.target.value))}
-              required
+              required={true}
+              disabled={!keystoneAvailable}
             />
             <FloatingSelect
               id="keystone-dungeon"
@@ -74,7 +101,8 @@ export const EditKeystoneModal = ({
               className={'flex-4'}
               onChange={(e) => setDungeon(e.target.value as DungeonId)}
               options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
-              required
+              required={true}
+              disabled={!keystoneAvailable}
             />
           </div>
 

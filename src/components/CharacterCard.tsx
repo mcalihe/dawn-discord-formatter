@@ -1,4 +1,5 @@
 import { Switch } from '@headlessui/react'
+import clsx from 'clsx'
 import { Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,14 +14,12 @@ interface CharacterBadgeProps {
   char: Character
   onToggleActive: () => void
   onUpdateChar: (char: Character) => void
-  onUpdateKeystone: (newKeystone: Character['keystone']) => void
   onDeleteChar: () => void
 }
 
 export const CharacterCard = ({
   char,
   onToggleActive,
-  onUpdateKeystone,
   onUpdateChar,
   onDeleteChar,
 }: CharacterBadgeProps) => {
@@ -49,13 +48,19 @@ export const CharacterCard = ({
         </div>
         <button
           onClick={() => setKeystoneModalOpen(true)}
-          className="self-start text-xs px-2 py-1 rounded border border-zinc-600 bg-zinc-700 text-white
-            hover:border-blue-400 hover:bg-blue-500/20
-            focus:outline-none focus:ring-2 focus:ring-blue-500
-            transition-colors duration-150 cursor-pointer"
+          className={clsx(
+            char.keystoneAvailable
+              ? 'bg-zinc-700 hover:border-blue-400 hover:bg-blue-500/20'
+              : 'bg-orange-900/40 hover:border-orange-400 hover:bg-orange-500/20',
+            'self-start text-xs px-2 py-1 rounded border border-zinc-600  text-white' +
+              'focus:outline-none focus:ring-1 focus:ring-blue-500' +
+              'transition-colors duration-150 cursor-pointer'
+          )}
           title={t('change.keystone.title')}
         >
-          +{char.keystone.level} {char.keystone.dungeon}
+          {char.keystoneAvailable
+            ? `+${char.keystone.level} ${char.keystone.dungeon}`
+            : 'keystone.not.avaialable'}
         </button>
       </div>
       <div className="flex flex-col justify-between items-end gap-2">
@@ -95,9 +100,13 @@ export const CharacterCard = ({
         open={keystoneModalOpen}
         onClose={() => setKeystoneModalOpen(false)}
         onSave={(data) => {
-          onUpdateKeystone(data)
+          console.log(data)
+          char.keystone = data
+          char.keystoneAvailable = data.keystoneAvailable
+          onUpdateChar(char)
           setKeystoneModalOpen(false)
         }}
+        initialKeystoneAvailable={char.keystoneAvailable}
         initialLevel={char.keystone.level}
         initialDungeon={char.keystone.dungeon}
       />

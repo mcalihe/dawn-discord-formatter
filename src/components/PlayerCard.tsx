@@ -50,10 +50,6 @@ export const PlayerCard = ({ player, onUpdatePlayer, onDeletePlayer }: PlayerCar
                 player.characters[idx] = char
                 onUpdatePlayer()
               }}
-              onUpdateKeystone={(data) => {
-                player.characters[idx].keystone = data
-                onUpdatePlayer()
-              }}
               onToggleActive={() => {
                 player.characters[idx].active = !player.characters[idx].active
                 onUpdatePlayer()

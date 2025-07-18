@@ -1,6 +1,6 @@
 import { Dialog, Field, Label, Switch } from '@headlessui/react'
 import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Class } from '../../data/Class'
@@ -47,13 +47,31 @@ export const EditCharacterModal = ({
   const [charClass, setCharClass] = useState<Class>(character?.class ?? Class.Hunter)
   const [specs, setSpecs] = useState<Spec[]>(character?.specs ?? [Spec.BeastMastery])
   const [ilvl, setIlvl] = useState(character?.iLvl ?? 680)
-  const [keystoneAvailable, setKeystoneAvailable] = useState(character?.keystoneAvailable ?? true)
+  const [keystoneAvailable, setKeystoneAvailable] = useState(
+    character?.keystoneAvailable === undefined ? true : character?.keystoneAvailable
+  )
   const [keystoneLevel, setKeystoneLevel] = useState(character?.keystone.level ?? 12)
   const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(
     character?.keystone.dungeon ?? DungeonId.DFC
   )
   const [rioScore, setRioScore] = useState(character?.rioScore ?? 0)
   const [active, setActive] = useState(character?.active !== undefined ? character.active : true)
+
+  useEffect(() => {
+    if (open) {
+      setName(character?.name ?? '')
+      setRealm(character?.realm ?? '')
+      setFaction(character?.faction ?? Faction.Horde)
+      setCharClass(character?.class ?? Class.Hunter)
+      setSpecs(character?.specs ?? [Spec.BeastMastery])
+      setIlvl(character?.iLvl ?? 680)
+      setKeystoneAvailable(character?.keystoneAvailable ?? true)
+      setKeystoneLevel(character?.keystone.level ?? 12)
+      setKeystoneDungeon(character?.keystone.dungeon ?? DungeonId.DFC)
+      setRioScore(character?.rioScore ?? 0)
+      setActive(true)
+    }
+  }, [open])
 
   const resetData = () => {
     setName(character?.name ?? '')
