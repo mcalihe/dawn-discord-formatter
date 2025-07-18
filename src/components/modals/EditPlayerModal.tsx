@@ -55,7 +55,7 @@ export const EditPlayerModal = ({
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
           <Dialog.Title className="text-lg font-semibold">
             <div className={'flex flex-row justify-between'}>
-              {t(mode == 'edit' ? 'modal.editPlayer.title' : 'modal.newPlayer.title')}
+              {mode == 'edit' ? t('modal.editPlayer.title') : t('modal.newPlayer.title')}
 
               <button
                 onClick={handleClose}

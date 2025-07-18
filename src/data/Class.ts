@@ -1,3 +1,5 @@
+import i18n from '../i18n'
+
 export enum Class {
   DeathKnight = 'death-knight',
   DemonHunter = 'demon-hunter',
@@ -14,21 +16,21 @@ export enum Class {
   Warrior = 'warrior',
 }
 
-export const CLASSES = [
-  { id: Class.DeathKnight, label: 'Death Knight' },
-  { id: Class.DemonHunter, label: 'Demon Hunter' },
-  { id: Class.Druid, label: 'Druid' },
-  { id: Class.Evoker, label: 'Evoker' },
-  { id: Class.Hunter, label: 'Hunter' },
-  { id: Class.Mage, label: 'Mage' },
-  { id: Class.Monk, label: 'Monk' },
-  { id: Class.Paladin, label: 'Paladin' },
-  { id: Class.Priest, label: 'Priest' },
-  { id: Class.Rogue, label: 'Rogue' },
-  { id: Class.Shaman, label: 'Shaman' },
-  { id: Class.Warlock, label: 'Warlock' },
-  { id: Class.Warrior, label: 'Warrior' },
-]
+export const CLASS_TRANSLATIONS: Record<Class, string> = {
+  [Class.DeathKnight]: i18n.t('class.deathKnight'),
+  [Class.DemonHunter]: i18n.t('class.demonHunter'),
+  [Class.Druid]: i18n.t('class.druid'),
+  [Class.Evoker]: i18n.t('class.evoker'),
+  [Class.Hunter]: i18n.t('class.hunter'),
+  [Class.Mage]: i18n.t('class.mage'),
+  [Class.Monk]: i18n.t('class.monk'),
+  [Class.Paladin]: i18n.t('class.paladin'),
+  [Class.Priest]: i18n.t('class.priest'),
+  [Class.Rogue]: i18n.t('class.rogue'),
+  [Class.Shaman]: i18n.t('class.shaman'),
+  [Class.Warlock]: i18n.t('class.warlock'),
+  [Class.Warrior]: i18n.t('class.warrior'),
+}
 
 export const CLASS_ICONS: Record<Class, string> = {
   [Class.DeathKnight]: ':deathknight:',

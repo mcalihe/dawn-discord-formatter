@@ -26,7 +26,7 @@ export const FactionRadioGroup = ({ value, onChange }: FactionRadioGroupProps) =
                     : 'bg-zinc-800 text-zinc-300 border-zinc-600 hover:border-blue-400 hover:text-white'
                 )}
               >
-                <span>{t(FACTION_TRANSLATION_KEYS[faction])}</span>
+                <span>{FACTION_TRANSLATION_KEYS[faction]}</span>
               </div>
             )}
           </RadioGroup.Option>

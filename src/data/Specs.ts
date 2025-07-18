@@ -1,3 +1,4 @@
+import i18n from '../i18n'
 import { Class } from './Class'
 import { Role } from './Roles'
 
@@ -68,72 +69,72 @@ export enum Spec {
   ProtectionWarrior = 'ProtectionWarrior',
 }
 
-export const SPEC_OPTIONS = [
+export const SPEC_TRANSLATION_KEYS: Record<Spec, string> = {
   // Death Knight
-  { id: Spec.Blood, label: 'Blood' },
-  { id: Spec.Frost, label: 'Frost' },
-  { id: Spec.Unholy, label: 'Unholy' },
+  [Spec.Blood]: i18n.t('spec.blood'),
+  [Spec.Frost]: i18n.t('spec.frost'),
+  [Spec.Unholy]: i18n.t('spec.unholy'),
 
   // Demon Hunter
-  { id: Spec.Havoc, label: 'Havoc' },
-  { id: Spec.Vengeance, label: 'Vengeance' },
+  [Spec.Havoc]: i18n.t('spec.havoc'),
+  [Spec.Vengeance]: i18n.t('spec.vengeance'),
 
   // Druid
-  { id: Spec.Balance, label: 'Balance' },
-  { id: Spec.Feral, label: 'Feral' },
-  { id: Spec.Guardian, label: 'Guardian' },
-  { id: Spec.RestorationDruid, label: 'Restoration' },
+  [Spec.Balance]: i18n.t('spec.balance'),
+  [Spec.Feral]: i18n.t('spec.feral'),
+  [Spec.Guardian]: i18n.t('spec.guardian'),
+  [Spec.RestorationDruid]: i18n.t('spec.restorationDruid'),
 
   // Evoker
-  { id: Spec.Devastation, label: 'Devastation' },
-  { id: Spec.Preservation, label: 'Preservation' },
-  { id: Spec.Augmentation, label: 'Augmentation' },
+  [Spec.Devastation]: i18n.t('spec.devastation'),
+  [Spec.Preservation]: i18n.t('spec.preservation'),
+  [Spec.Augmentation]: i18n.t('spec.augmentation'),
 
   // Hunter
-  { id: Spec.BeastMastery, label: 'Beast Mastery' },
-  { id: Spec.Marksmanship, label: 'Marksmanship' },
-  { id: Spec.Survival, label: 'Survival' },
+  [Spec.BeastMastery]: i18n.t('spec.beastMastery'),
+  [Spec.Marksmanship]: i18n.t('spec.marksmanship'),
+  [Spec.Survival]: i18n.t('spec.survival'),
 
   // Mage
-  { id: Spec.Arcane, label: 'Arcane' },
-  { id: Spec.Fire, label: 'Fire' },
-  { id: Spec.FrostMage, label: 'Frost' },
+  [Spec.Arcane]: i18n.t('spec.arcane'),
+  [Spec.Fire]: i18n.t('spec.fire'),
+  [Spec.FrostMage]: i18n.t('spec.frostMage'),
 
   // Monk
-  { id: Spec.Brewmaster, label: 'Brewmaster' },
-  { id: Spec.Mistweaver, label: 'Mistweaver' },
-  { id: Spec.Windwalker, label: 'Windwalker' },
+  [Spec.Brewmaster]: i18n.t('spec.brewmaster'),
+  [Spec.Mistweaver]: i18n.t('spec.mistweaver'),
+  [Spec.Windwalker]: i18n.t('spec.windwalker'),
 
   // Paladin
-  { id: Spec.HolyPaladin, label: 'Holy' },
-  { id: Spec.ProtectionPaladin, label: 'Protection' },
-  { id: Spec.Retribution, label: 'Retribution' },
+  [Spec.HolyPaladin]: i18n.t('spec.holyPaladin'),
+  [Spec.ProtectionPaladin]: i18n.t('spec.protectionPaladin'),
+  [Spec.Retribution]: i18n.t('spec.retribution'),
 
   // Priest
-  { id: Spec.Discipline, label: 'Discipline' },
-  { id: Spec.HolyPriest, label: 'Holy' },
-  { id: Spec.Shadow, label: 'Shadow' },
+  [Spec.Discipline]: i18n.t('spec.discipline'),
+  [Spec.HolyPriest]: i18n.t('spec.holyPriest'),
+  [Spec.Shadow]: i18n.t('spec.shadow'),
 
   // Rogue
-  { id: Spec.Assassination, label: 'Assassination' },
-  { id: Spec.Outlaw, label: 'Outlaw' },
-  { id: Spec.Subtlety, label: 'Subtlety' },
+  [Spec.Assassination]: i18n.t('spec.assassination'),
+  [Spec.Outlaw]: i18n.t('spec.outlaw'),
+  [Spec.Subtlety]: i18n.t('spec.subtlety'),
 
   // Shaman
-  { id: Spec.Elemental, label: 'Elemental' },
-  { id: Spec.Enhancement, label: 'Enhancement' },
-  { id: Spec.RestorationShaman, label: 'Restoration' },
+  [Spec.Elemental]: i18n.t('spec.elemental'),
+  [Spec.Enhancement]: i18n.t('spec.enhancement'),
+  [Spec.RestorationShaman]: i18n.t('spec.restorationShaman'),
 
   // Warlock
-  { id: Spec.Affliction, label: 'Affliction' },
-  { id: Spec.Demonology, label: 'Demonology' },
-  { id: Spec.Destruction, label: 'Destruction' },
+  [Spec.Affliction]: i18n.t('spec.affliction'),
+  [Spec.Demonology]: i18n.t('spec.demonology'),
+  [Spec.Destruction]: i18n.t('spec.destruction'),
 
   // Warrior
-  { id: Spec.Arms, label: 'Arms' },
-  { id: Spec.Fury, label: 'Fury' },
-  { id: Spec.ProtectionWarrior, label: 'Protection' },
-]
+  [Spec.Arms]: i18n.t('spec.arms'),
+  [Spec.Fury]: i18n.t('spec.fury'),
+  [Spec.ProtectionWarrior]: i18n.t('spec.protectionWarrior'),
+}
 
 export const SPECS_BY_CLASS: Record<Class, { spec: Spec; role: Role }[]> = {
   [Class.DeathKnight]: [

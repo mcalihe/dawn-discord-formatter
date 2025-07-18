@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DungeonId, Dungeons } from '../../data/Dungeons'
+import { DUNGEON_TRANSLATION_KEYS, DungeonId } from '../../data/Dungeons'
 import { FloatingInput } from '../FloatingInput'
 import { FloatingSelect } from '../FloatingSelect'
 
@@ -98,9 +98,12 @@ export const EditKeystoneModal = ({
               id="keystone-dungeon"
               label={t('modal.newCharacter.keystone.dungeon')}
               value={dungeon}
-              className={'flex-4'}
+              className={'flex-2'}
               onChange={(e) => setDungeon(e.target.value as DungeonId)}
-              options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
+              options={Object.entries(DUNGEON_TRANSLATION_KEYS).map(([key, label]) => ({
+                value: key,
+                label: label,
+              }))}
               required={true}
               disabled={!keystoneAvailable}
             />

@@ -3,8 +3,8 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Class } from '../../data/Class'
-import { DungeonId, Dungeons } from '../../data/Dungeons'
+import { Class, CLASS_TRANSLATIONS } from '../../data/Class'
+import { DUNGEON_TRANSLATION_KEYS, DungeonId } from '../../data/Dungeons'
 import { Faction } from '../../data/Faction'
 import { Role } from '../../data/Roles'
 import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
@@ -23,15 +23,9 @@ interface NewCharacterModalProps {
   mode: 'create' | 'edit'
 }
 
-const formatLabel = (value: string) =>
-  value
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-
-const CLASS_OPTIONS = Object.entries(Class).map(([, value]) => ({
-  value,
-  label: formatLabel(value),
+const CLASS_OPTIONS = Object.entries(CLASS_TRANSLATIONS).map(([key, label]) => ({
+  value: key,
+  label,
 }))
 
 export const EditCharacterModal = ({
@@ -126,7 +120,7 @@ export const EditCharacterModal = ({
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
           <Dialog.Title className="text-lg font-semibold">
             <div className="flex justify-between items-center">
-              {t(mode == 'edit' ? 'modal.editCharacter.title' : 'modal.newCharacter.title')}
+              {mode == 'edit' ? t('modal.editCharacter.title') : t('modal.newCharacter.title')}
               <button
                 onClick={() => handleClose(true)}
                 className="text-zinc-400 hover:text-white transition cursor-pointer"
@@ -136,6 +130,8 @@ export const EditCharacterModal = ({
               </button>
             </div>
           </Dialog.Title>
+
+          <FactionRadioGroup value={faction} onChange={setFaction} />
 
           <div className="flex gap-4">
             <FloatingInput
@@ -162,8 +158,6 @@ export const EditCharacterModal = ({
             onChange={(e) => setRioScore(parseInt(e.target.value))}
             required={true}
           />
-
-          <FactionRadioGroup value={faction} onChange={setFaction} />
 
           <FloatingSelect
             id="char-class"
@@ -221,9 +215,12 @@ export const EditCharacterModal = ({
               id="keystone-dungeon"
               label={t('modal.newCharacter.keystone.dungeon')}
               value={keystoneDungeon}
-              className={'flex-4'}
+              className={'flex-2'}
               onChange={(e) => setKeystoneDungeon(e.target.value as DungeonId)}
-              options={Dungeons.map((d) => ({ value: d.id, label: d.name }))}
+              options={Object.entries(DUNGEON_TRANSLATION_KEYS).map(([key, label]) => ({
+                value: key,
+                label: label,
+              }))}
               required={true}
               disabled={!keystoneAvailable}
             />
@@ -291,7 +288,8 @@ export const EditCharacterModal = ({
                 specs.length === 0 ||
                 !keystoneLevel ||
                 !keystoneDungeon ||
-                !ilvl
+                !ilvl ||
+                (!tradeAllArmor && cantTrade.length <= 0)
               }
               className="bg-blue-600 hover:bg-blue-500 text-white text-sm px-4 py-2 rounded transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >

@@ -2,7 +2,7 @@ import { Listbox } from '@headlessui/react'
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { ArmorSlot } from '../data/AmorSlot'
+import { ARMOR_SLOT_TRANSLATIONS, ArmorSlot } from '../data/AmorSlot'
 
 interface SpecSelectProps {
   disabled: boolean
@@ -31,7 +31,7 @@ export const ArmorMultiSelect = ({ disabled, armorSlots, setArmorSlots }: SpecSe
             `}
           >
             {armorSlots.length > 0 ? (
-              armorSlots.join(', ')
+              armorSlots.map((at) => ARMOR_SLOT_TRANSLATIONS[at]).join(', ')
             ) : (
               <span className="text-zinc-500">
                 {t('modal.newCharacter.cant.trade.placeholder')}

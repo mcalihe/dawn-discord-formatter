@@ -4,7 +4,7 @@ import { Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CLASSES } from '../data/Class'
+import { CLASS_TRANSLATIONS } from '../data/Class'
 import { Character } from '../models/Character'
 import { ConfirmModal } from './modals/ConfirmModal'
 import { EditCharacterModal } from './modals/EditCharacterModal'
@@ -43,7 +43,7 @@ export const CharacterCard = ({
             {char.name} • {char.realm}{' '}
           </span>
           <span className="text-xs">
-            {CLASSES.find((c) => c.id === char.class)?.label} • {char.roles.join(', ')}
+            {CLASS_TRANSLATIONS[char.class]} • {char.roles.join(', ')}
           </span>
         </div>
         <button
@@ -60,7 +60,7 @@ export const CharacterCard = ({
         >
           {char.keystoneAvailable
             ? `+${char.keystone.level} ${char.keystone.dungeon}`
-            : 'keystone.not.avaialable'}
+            : t('keystone.not.available')}
         </button>
       </div>
       <div className="flex flex-col justify-between items-end gap-2">

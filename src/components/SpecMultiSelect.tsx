@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Class } from '../data/Class'
-import { Spec, SPECS_BY_CLASS } from '../data/Specs'
+import { Spec, SPEC_TRANSLATION_KEYS, SPECS_BY_CLASS } from '../data/Specs'
 
 interface SpecSelectProps {
   charClass: Class | ''
@@ -68,7 +68,7 @@ export const SpecMultiSelect = ({ charClass, specs, setSpecs }: SpecSelectProps)
                         <span className="w-4 h-4 shrink-0" />
                       )}
                       <span className={selected ? 'font-medium text-white' : 'text-white'}>
-                        {spec}
+                        {SPEC_TRANSLATION_KEYS[spec]}
                       </span>
                     </>
                   )}
