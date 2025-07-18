@@ -1,3 +1,5 @@
+import i18n from 'i18next'
+
 import { ArmorSlot } from '../data/AmorSlot'
 import { Class, CLASS_ICONS } from '../data/Class'
 import { FACTION_ICONS } from '../data/Faction'
@@ -95,3 +97,9 @@ export class DiscordFormatService {
       .join('\n')
   }
 }
+
+export const KEYS_FOR_MARKING = [
+  i18n.t('trade.all.armor'),
+  i18n.t('trade.all.armor.except'),
+  i18n.t('no.players.active'),
+]

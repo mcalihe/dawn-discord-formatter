@@ -100,6 +100,8 @@ export default function App() {
 
     if (Object.keys(teams).length <= 0) {
       teams[NEW_TEAM_NAME] = []
+      setPlayers([])
+      setTeams({ ...teams })
     }
     setCurrentTeamKey(Object.keys(teams)[0])
   }
