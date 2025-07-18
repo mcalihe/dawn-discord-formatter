@@ -30,7 +30,7 @@ export class DiscordFormatService {
     }
 
     const header = groupSizeLabels[activePlayers.length]
-    let output = header + (activePlayers.length === 1 ? ' ' : '\n')
+    let output = `${header} ${activePlayers.length === 1 ? ' ' : '\n\n '}`
     const playerDescriptions = activePlayers
       .map((p, idx) =>
         this.formatPlayer(
@@ -41,7 +41,7 @@ export class DiscordFormatService {
           activePlayers.length === 1 ? undefined : idx + 1
         )
       )
-      .join('\n')
+      .join('\n\n')
     output += playerDescriptions + '\n'
     return output
   }
