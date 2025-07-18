@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 interface MarkdownOutputProps {
   value?: string
-  className: string
+  className?: string
 }
 
 export const MarkdownOutput = ({ value, className }: MarkdownOutputProps) => {

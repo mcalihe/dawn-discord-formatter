@@ -24,7 +24,7 @@ export const CharacterCard = ({
   onDeleteChar,
 }: CharacterBadgeProps) => {
   const { t } = useTranslation()
-  const classTranslations = useClassTranslations()
+  const classTranslations = useClassTranslations(t)
 
   const [keystoneModalOpen, setKeystoneModalOpen] = useState(false)
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false)

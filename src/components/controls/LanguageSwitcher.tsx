@@ -2,18 +2,41 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 
-const languages = [
+import { LANGUAGE } from '../../data/StorageKeys'
+
+export const languages: Language[] = [
   { code: 'en', name: 'English', flag: 'https://flagcdn.com/gb.svg' },
   { code: 'de', name: 'Deutsch', flag: 'https://flagcdn.com/de.svg' },
 ]
 
-export function LanguageSwitcher() {
-  const { i18n } = useTranslation()
-  const current = languages.find((l) => l.code === i18n.language) ?? languages[0]
+export type Language = {
+  code: string
+  name: string
+  flag: string
+}
 
-  const handleChange = (lng: string) => {
-    i18n.changeLanguage(lng)
-    localStorage.setItem('lng', lng)
+interface LanguageSwitcherProps {
+  isGlobal: boolean
+  currentLanguage?: Language
+  onLngChange?: (lang: Language) => void
+}
+export function LanguageSwitcher({
+  isGlobal,
+  onLngChange,
+  currentLanguage,
+}: LanguageSwitcherProps) {
+  const { i18n } = useTranslation()
+  const current =
+    (isGlobal ? languages.find((l) => l.code === i18n.language) : currentLanguage) ?? languages[0]
+
+  const handleChange = (lng: Language) => {
+    if (isGlobal) {
+      i18n.changeLanguage(lng.code)
+      localStorage.setItem(LANGUAGE, lng.code)
+    }
+    if (onLngChange) {
+      onLngChange(lng)
+    }
   }
 
   return (
@@ -32,10 +55,10 @@ export function LanguageSwitcher() {
           <MenuItem key={language.code}>
             {({ active }) => (
               <button
-                onClick={() => handleChange(language.code)}
+                onClick={() => handleChange(language)}
                 className={clsx(
                   'w-full flex items-center gap-2 p-1 rounded-md transition cursor-pointer',
-                  i18n.language === language.code && 'ring-1 ring-blue-500',
+                  current.code === language.code && 'ring-1 ring-blue-500',
                   active && 'bg-blue-500/10'
                 )}
               >

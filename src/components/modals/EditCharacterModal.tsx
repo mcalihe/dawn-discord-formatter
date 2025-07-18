@@ -31,7 +31,7 @@ export const EditCharacterModal = ({
   mode = 'edit',
 }: NewCharacterModalProps) => {
   const { t } = useTranslation()
-  const classTranslations = useClassTranslations()
+  const classTranslations = useClassTranslations(t)
   const dungeonTranslations = useDungeonTranslations()
 
   const CLASS_OPTIONS = Object.entries(classTranslations).map(([key, label]) => ({

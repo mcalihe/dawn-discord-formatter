@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next'
-
 export enum ArmorSlot {
   Head = 'head',
   Neck = 'neck',
@@ -24,9 +22,7 @@ export enum ArmorSlot {
   Shirt = 'shirt',
 }
 
-export function useArmorSlotTranslations(): Record<ArmorSlot, string> {
-  const { t } = useTranslation()
-
+export function useArmorSlotTranslations(t: (key: string) => string): Record<ArmorSlot, string> {
   return {
     [ArmorSlot.Head]: t('armorSlot.head'),
     [ArmorSlot.Neck]: t('armorSlot.neck'),

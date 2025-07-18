@@ -11,11 +11,11 @@ interface SpecSelectProps {
 }
 const ARMOR_OPTIONS = Object.values(ArmorSlot).map((slot) => ({
   value: slot,
-  label: slot.charAt(0).toUpperCase() + slot.slice(1), // z.B. "head" -> "Head"
+  label: slot.charAt(0).toUpperCase() + slot.slice(1),
 }))
 export const ArmorMultiSelect = ({ disabled, armorSlots, setArmorSlots }: SpecSelectProps) => {
   const { t } = useTranslation()
-  const armorSlotTranslation = useArmorSlotTranslations()
+  const armorSlotTranslation = useArmorSlotTranslations(t)
 
   const handleChange = (value: ArmorSlot[]) => {
     setArmorSlots(value)

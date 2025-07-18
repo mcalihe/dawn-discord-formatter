@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next'
-
 export enum Class {
   DeathKnight = 'death-knight',
   DemonHunter = 'demon-hunter',
@@ -16,9 +14,7 @@ export enum Class {
   Warrior = 'warrior',
 }
 
-export function useClassTranslations(): Record<Class, string> {
-  const { t } = useTranslation()
-
+export function useClassTranslations(t: (key: string) => string): Record<Class, string> {
   return {
     [Class.DeathKnight]: t('class.deathKnight'),
     [Class.DemonHunter]: t('class.demonHunter'),
