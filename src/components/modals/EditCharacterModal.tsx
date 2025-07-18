@@ -9,6 +9,8 @@ import { Faction } from '../../data/Faction'
 import { Role } from '../../data/Roles'
 import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
 import { Character } from '../../models/Character'
+import { ArmorMultiSelect } from '../ArmorMultiSelect'
+import { FactionRadioGroup } from '../FactionRadioGroup'
 import { FloatingInput } from '../FloatingInput'
 import { FloatingSelect } from '../FloatingSelect'
 import { SpecMultiSelect } from '../SpecMultiSelect'
@@ -54,24 +56,10 @@ export const EditCharacterModal = ({
   const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(
     character?.keystone.dungeon ?? DungeonId.DFC
   )
+  const [tradeAllArmor, setTradeAllArmor] = useState(character?.tradeAllArmor ?? true)
+  const [cantTrade, setCantTrade] = useState(character?.cantTrade ?? [])
   const [rioScore, setRioScore] = useState(character?.rioScore ?? 0)
   const [active, setActive] = useState(character?.active !== undefined ? character.active : true)
-
-  useEffect(() => {
-    if (open) {
-      setName(character?.name ?? '')
-      setRealm(character?.realm ?? '')
-      setFaction(character?.faction ?? Faction.Horde)
-      setCharClass(character?.class ?? Class.Hunter)
-      setSpecs(character?.specs ?? [Spec.BeastMastery])
-      setIlvl(character?.iLvl ?? 680)
-      setKeystoneAvailable(character?.keystoneAvailable ?? true)
-      setKeystoneLevel(character?.keystone.level ?? 12)
-      setKeystoneDungeon(character?.keystone.dungeon ?? DungeonId.DFC)
-      setRioScore(character?.rioScore ?? 0)
-      setActive(true)
-    }
-  }, [open])
 
   const resetData = () => {
     setName(character?.name ?? '')
@@ -83,9 +71,17 @@ export const EditCharacterModal = ({
     setKeystoneAvailable(character?.keystoneAvailable ?? true)
     setKeystoneLevel(character?.keystone.level ?? 12)
     setKeystoneDungeon(character?.keystone.dungeon ?? DungeonId.DFC)
+    setTradeAllArmor(character?.tradeAllArmor ?? true)
+    setCantTrade(character?.cantTrade ?? [])
     setRioScore(character?.rioScore ?? 0)
     setActive(true)
   }
+
+  useEffect(() => {
+    if (open) {
+      resetData()
+    }
+  }, [open])
 
   const handleClose = (reset: boolean = false) => {
     if (reset) {
@@ -117,6 +113,8 @@ export const EditCharacterModal = ({
       active,
       keystoneAvailable: keystoneAvailable,
       keystone: { level: keystoneLevel, dungeon: keystoneDungeon },
+      tradeAllArmor,
+      cantTrade,
     })
     handleClose(mode == 'create')
   }
@@ -164,6 +162,8 @@ export const EditCharacterModal = ({
             onChange={(e) => setRioScore(parseInt(e.target.value))}
             required={true}
           />
+
+          <FactionRadioGroup value={faction} onChange={setFaction} />
 
           <FloatingSelect
             id="char-class"
@@ -228,6 +228,32 @@ export const EditCharacterModal = ({
               disabled={!keystoneAvailable}
             />
           </div>
+
+          <Field>
+            <div className="flex items-center gap-3">
+              <Switch
+                id={'trade-all'}
+                checked={tradeAllArmor}
+                onChange={setTradeAllArmor}
+                className={`${
+                  tradeAllArmor ? 'bg-blue-600' : 'bg-zinc-700'
+                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none`}
+              >
+                <span
+                  className={`${
+                    tradeAllArmor ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                />
+              </Switch>
+              <Label className="text-sm text-white">{t('modal.newCharacter.trade.all')}</Label>
+            </div>
+          </Field>
+
+          <ArmorMultiSelect
+            disabled={tradeAllArmor}
+            armorSlots={cantTrade}
+            setArmorSlots={setCantTrade}
+          />
 
           <Field>
             <div className="flex items-center gap-3">

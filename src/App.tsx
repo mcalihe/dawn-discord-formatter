@@ -28,6 +28,8 @@ export default function App() {
           iLvl: 682,
           keystoneAvailable: true,
           keystone: { dungeon: DungeonId.ML, level: 12 },
+          tradeAllArmor: true,
+          cantTrade: [],
           roles: [Role.DPS],
           faction: Faction.Horde,
           source: 'manual',

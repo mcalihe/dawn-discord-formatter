@@ -1,3 +1,4 @@
+import { ArmorSlot } from '../data/AmorSlot'
 import { Class } from '../data/Class'
 import { Faction } from '../data/Faction'
 import { Role } from '../data/Roles'
@@ -14,6 +15,8 @@ export interface Character {
   iLvl: number
   keystoneAvailable: boolean
   keystone: Keystone
+  tradeAllArmor: boolean
+  cantTrade: ArmorSlot[]
   faction: Faction
   active: boolean
   source: string
