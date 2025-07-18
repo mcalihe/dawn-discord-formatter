@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react'
 import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FloatingInput } from '../FloatingInput'
@@ -8,17 +8,34 @@ import { FloatingInput } from '../FloatingInput'
 interface NewPlayerModalProps {
   open: boolean
   onClose: () => void
+  mode: 'create' | 'edit'
+  initialName?: string
+  initialDiscord?: string
   onSave: (data: { name: string; discord?: string }) => void
 }
 
-export const EditPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) => {
+export const EditPlayerModal = ({
+  open,
+  onClose,
+  onSave,
+  mode = 'edit',
+  initialName,
+  initialDiscord,
+}: NewPlayerModalProps) => {
   const { t } = useTranslation()
-  const [name, setName] = useState('')
-  const [discord, setDiscord] = useState('')
+  const [name, setName] = useState(initialName ?? '')
+  const [discord, setDiscord] = useState(initialDiscord ?? '')
+
+  useEffect(() => {
+    if (open) {
+      setName(initialName ?? '')
+      setDiscord(initialDiscord ?? '')
+    }
+  }, [open, initialName, initialDiscord])
 
   const resetData = () => {
-    setName('')
-    setDiscord('')
+    setName(initialName ?? '')
+    setDiscord(initialDiscord ?? '')
   }
 
   const handleClose = () => {
@@ -38,7 +55,7 @@ export const EditPlayerModal = ({ open, onClose, onSave }: NewPlayerModalProps) 
         <Dialog.Panel className="w-full max-w-md bg-zinc-900 text-white rounded-xl p-6 space-y-4 shadow-xl">
           <Dialog.Title className="text-lg font-semibold">
             <div className={'flex flex-row justify-between'}>
-              {t('modal.newPlayer.title')}
+              {t(mode == 'edit' ? 'modal.editPlayer.title' : 'modal.newPlayer.title')}
 
               <button
                 onClick={handleClose}

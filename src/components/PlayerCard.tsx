@@ -1,4 +1,4 @@
-import { Trash, UserRound } from 'lucide-react'
+import { Pencil, Trash, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,6 +8,7 @@ import { AddNewCharacterBadge } from './AddNewCharacterBadge'
 import { CharacterCard } from './CharacterCard'
 import { ConfirmModal } from './modals/ConfirmModal'
 import { EditCharacterModal } from './modals/EditCharacterModal'
+import { EditPlayerModal } from './modals/EditPlayerModal'
 
 type PlayerCardProps = {
   player: Player
@@ -19,6 +20,7 @@ export const PlayerCard = ({ player, onUpdatePlayer, onDeletePlayer }: PlayerCar
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false)
+  const [editPlayerModalOpen, setEditPlayerModalOpen] = useState(false)
 
   const handleAddCharacter = (char: Character) => {
     player.characters = [...player.characters, char]
@@ -33,13 +35,22 @@ export const PlayerCard = ({ player, onUpdatePlayer, onDeletePlayer }: PlayerCar
             <UserRound className="w-6 h-6" />
             <h2 className="text-sm font-medium">{player.name}</h2>
           </div>
-          <button
-            onClick={() => setDeleteConfirmationModalOpen(true)}
-            className="p-1 h-6 w-6 rounded hover:text-white text-zinc-400 hover:bg-red-900 transition cursor-pointer"
-            title={t('tooltip.deletePlayer')}
-          >
-            <Trash className="w-4 h-4" />
-          </button>
+          <div className={'flex flex-row items-center gap-1'}>
+            <button
+              onClick={() => setEditPlayerModalOpen(true)}
+              className="p-1 h-5 w-5 rounded hover:text-white text-zinc-400 hover:bg-zinc-700 transition cursor-pointer"
+              title={t('tooltip.editCharacter')}
+            >
+              <Pencil className="w-3 h-3" />
+            </button>
+            <button
+              onClick={() => setDeleteConfirmationModalOpen(true)}
+              className="p-1 h-5 w-5 rounded hover:text-white text-zinc-400 hover:bg-red-900 transition cursor-pointer"
+              title={t('tooltip.deletePlayer')}
+            >
+              <Trash className="w-3 h-3" />
+            </button>
+          </div>
         </div>
         <div className={'flex flex-col gap-2'}>
           {player.characters.map((char, idx) => (
@@ -66,6 +77,18 @@ export const PlayerCard = ({ player, onUpdatePlayer, onDeletePlayer }: PlayerCar
             open={showModal}
             onClose={() => setShowModal(false)}
             onSave={handleAddCharacter}
+          />
+          <EditPlayerModal
+            open={editPlayerModalOpen}
+            mode={'edit'}
+            initialName={player.name}
+            initialDiscord={player.discord}
+            onClose={() => setEditPlayerModalOpen(false)}
+            onSave={({ name, discord }) => {
+              player.name = name
+              player.discord = discord
+              onUpdatePlayer()
+            }}
           />
           <ConfirmModal
             open={deleteConfirmationModalOpen}

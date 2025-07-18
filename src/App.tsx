@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { AddNewPlayerCard } from './components/AddNewPlayerCard'
+import { Footer } from './components/Footer'
 import { MarkdownOutput } from './components/MarkdownOutput'
 import { EditPlayerModal } from './components/modals/EditPlayerModal'
 import { PlayerCard } from './components/PlayerCard'
@@ -91,6 +92,7 @@ export default function App() {
           <EditPlayerModal
             open={showModal}
             onClose={() => setShowModal(false)}
+            mode={'create'}
             onSave={(data) => AddNewPlayer(data.name, data.discord)}
           />
         </div>
@@ -100,6 +102,7 @@ export default function App() {
         <h2>Output</h2>
         <MarkdownOutput value={output} className={'max-w-[60rem]'} />
       </div>
+      <Footer />
     </div>
   )
 }
