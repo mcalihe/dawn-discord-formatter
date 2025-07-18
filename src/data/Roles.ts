@@ -5,6 +5,6 @@ export enum Role {
 }
 export const ROLE_ICONS: Record<Role, string> = {
   Tank: ':Tank:',
-  Healer: ':Healer:',
+  Healer: ':Heal:',
   DPS: ':DPS:',
 }
