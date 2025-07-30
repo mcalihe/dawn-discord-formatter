@@ -2,6 +2,11 @@
 
 A simple and sleek web tool for building and formatting M+ teams for the Dawn WoW boosting community.
 
+## 🎮 Demo
+[Dawn Discord Formatter](https://dawn-formatter.michael-isler.com/)
+
+*https://dawn-formatter.michael-isler.com/*
+
 ---
 
 ## ✨ Features
@@ -12,6 +17,17 @@ A simple and sleek web tool for building and formatting M+ teams for the Dawn Wo
 - 🧠 Smart formatting with consistent layout for **Discord Markdown**
 - 🌐 Switch between multiple **Teams**
 - 📤 Copy and paste the formatted result directly into Discord
+
+---
+
+
+## 🔧 How to Use
+
+1. 🔽 Open the web app
+2. ➕ Add new players and characters
+3. 🧙 Set details like class, role(s), ilvl, keystone and armor trade
+4. 🌍 Switch output language if needed
+5. 📤 Copy the formatted message and paste it into Discord
 
 ---
 
