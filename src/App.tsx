@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { AddNewPlayerCard } from './components/cards/AddNewPlayerCard'
 import { PlayerCard } from './components/cards/PlayerCard'
 import { FloatingSelect } from './components/controls/FloatingSelect'
+import { ImportExportButtons } from './components/controls/ImportExportButtons'
 import { Language, languages, LanguageSwitcher } from './components/controls/LanguageSwitcher'
 import { Footer } from './components/Footer'
 import { MarkdownOutput } from './components/MarkdownOutput'
@@ -13,13 +14,11 @@ import { EditPlayerModal } from './components/modals/EditPlayerModal'
 import { EditTeamModal } from './components/modals/EditTeamModal'
 import { useArmorSlotTranslations } from './data/AmorSlot'
 import { useClassTranslations } from './data/Class'
-import { CURRENT_TEAM, TEAMS } from './data/StorageKeys'
 import { Teams } from './data/Teams'
 import i18nOutput from './i18nOutput'
 import { Player } from './models/Player'
+import { DataStorageService } from './services/DataStorageService'
 import { DiscordFormatService } from './services/DiscordFormatService'
-
-const NEW_TEAM_NAME = 'New Team'
 
 export default function App() {
   // const test: Player[] = [
@@ -48,36 +47,15 @@ export default function App() {
   //   },
   // ]
 
-  let loadedTeams: Teams
-  let currentTeam = NEW_TEAM_NAME
-
-  try {
-    const localTeam = localStorage.getItem(TEAMS)
-    const localCurrentTeam = localStorage.getItem(CURRENT_TEAM)
-    loadedTeams = localTeam ? JSON.parse(localTeam) : []
-    const teamKeys = Object.keys(localCurrentTeam ?? {})
-
-    const firstLocalTeamKey = teamKeys.length > 0 ? teamKeys[0] : undefined
-    currentTeam = localCurrentTeam || firstLocalTeamKey || NEW_TEAM_NAME
-  } catch (e) {
-    console.error(e)
-    loadedTeams = {}
-    currentTeam = NEW_TEAM_NAME
-  }
-
-  const teamKeys = Object.keys(loadedTeams)
-  if (teamKeys.length <= 0) {
-    loadedTeams[NEW_TEAM_NAME] = []
-  }
-  if (!teamKeys.some((k) => k == currentTeam)) {
-    currentTeam = NEW_TEAM_NAME
-  }
+  const storedTeamsData = DataStorageService.loadTeamsFromLocalStorage()
 
   const { t } = useTranslation()
-  const [teams, setTeams] = useState<Teams>(loadedTeams)
-  const [currentTeamKey, setCurrentTeamKey] = useState<string>(currentTeam)
+  const [teams, setTeams] = useState<Teams>(storedTeamsData.teams)
+  const [currentTeamKey, setCurrentTeamKey] = useState<string>(storedTeamsData.currentTeam)
 
-  const [players, setPlayers] = useState<Player[]>(teams[currentTeamKey])
+  console.log(teams[currentTeamKey])
+
+  const [players, setPlayers] = useState<Player[]>(teams[currentTeamKey] ?? [])
   const [output, setOutput] = useState<string>()
   const [outputLanguage, setOutputLanguage] = useState<Language>(languages[0])
   const [showModal, setShowModal] = useState(false)
@@ -99,7 +77,7 @@ export default function App() {
     setTeams({ ...teams })
 
     if (Object.keys(teams).length <= 0) {
-      teams[NEW_TEAM_NAME] = []
+      teams[DataStorageService.NEW_TEAM_NAME] = []
       setPlayers([])
       setTeams({ ...teams })
     }
@@ -107,11 +85,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    localStorage.setItem(TEAMS, JSON.stringify(teams))
+    DataStorageService.saveTeams(teams)
   }, [players, teams])
 
   useEffect(() => {
-    localStorage.setItem(CURRENT_TEAM, currentTeamKey)
+    DataStorageService.saveCurrentTeamKey(currentTeamKey)
     setPlayers(teams[currentTeamKey])
   }, [currentTeamKey])
 
@@ -139,13 +117,41 @@ export default function App() {
         )
       )
     })
-  }, [players, currentTeam, outputLanguage])
+  }, [players, currentTeamKey, outputLanguage])
+
+  const importData = (json: string) => {
+    try {
+      const parsed = JSON.parse(json) as { teams: Teams; currentTeam: string }
+      const importedTeams = parsed.teams ?? []
+
+      const parsedData = DataStorageService.loadTeamAndCurrentWithFallback(
+        parsed.teams,
+        parsed.currentTeam
+      )
+
+      setTeams(parsedData.teams)
+      setCurrentTeamKey(parsedData.currentTeam)
+      setPlayers(parsed.teams[parsedData.currentTeam] ?? [])
+      DataStorageService.saveCurrentTeamKey(parsedData.currentTeam)
+      DataStorageService.saveTeams(importedTeams)
+    } catch (e) {
+      console.error(e)
+      alert('Invalid JSON. Could not parse.')
+    }
+  }
 
   return (
     <div className={'flex flex-col w-full flex-1 gap-8'}>
       <div className={'flex flex-col gap-8'}>
         <div className={'flex flex-row justify-between w-full gap-8'}>
-          <h1>Dawn Discord Formatter</h1>
+          <div className={'flex flex-row gap-8'}>
+            <h1>Dawn Discord Formatter</h1>
+            <ImportExportButtons
+              storedTeamsData={{ teams: teams, currentTeam: currentTeamKey }}
+              onImport={importData}
+            />
+          </div>
+
           <div className={'flex flex-row items-center gap-8'}>
             <div className={'flex flex-row items-center gap-2'}>
               <button
@@ -240,7 +246,7 @@ export default function App() {
         open={deleteConfirmationModalOpen}
         onClose={() => setDeleteConfirmationModalOpen(false)}
         onSave={() => {
-          onDeleteTeam(currentTeam)
+          onDeleteTeam(currentTeamKey)
         }}
         title={t('confirm.modal.delete.team.title')}
         bodyText={t('confirm.modal.delete.team.description')}
@@ -250,7 +256,7 @@ export default function App() {
       />
       <EditTeamModal
         open={editTeamModalOpen}
-        initialName={currentTeam}
+        initialName={currentTeamKey}
         mode={editTeamModalMode}
         onClose={() => setEditTeamModalOpen(false)}
         onSave={({ name }) => {
