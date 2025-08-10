@@ -34,6 +34,10 @@ export const EditCharacterModal = ({
   const classTranslations = useClassTranslations(t)
   const dungeonTranslations = useDungeonTranslations()
 
+  const dungeonExists = (value?: string): boolean => {
+    return Object.values(DungeonId).includes(value as DungeonId)
+  }
+
   const CLASS_OPTIONS = Object.entries(classTranslations).map(([key, label]) => ({
     value: key,
     label,
@@ -50,7 +54,9 @@ export const EditCharacterModal = ({
   )
   const [keystoneLevel, setKeystoneLevel] = useState(character?.keystone.level ?? 12)
   const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(
-    character?.keystone.dungeon ?? DungeonId.DFC
+    dungeonExists(character?.keystone.dungeon)
+      ? (character?.keystone.dungeon ?? DungeonId.Ara)
+      : DungeonId.Ara
   )
   const [tradeAllArmor, setTradeAllArmor] = useState(character?.tradeAllArmor ?? true)
   const [cantTrade, setCantTrade] = useState(character?.cantTrade ?? [])
@@ -66,7 +72,11 @@ export const EditCharacterModal = ({
     setIlvl(character?.iLvl ?? 680)
     setKeystoneAvailable(character?.keystoneAvailable ?? true)
     setKeystoneLevel(character?.keystone.level ?? 12)
-    setKeystoneDungeon(character?.keystone.dungeon ?? DungeonId.DFC)
+    setKeystoneDungeon(
+      dungeonExists(character?.keystone.dungeon)
+        ? (character?.keystone.dungeon ?? DungeonId.Ara)
+        : DungeonId.Ara
+    )
     setTradeAllArmor(character?.tradeAllArmor ?? true)
     setCantTrade(character?.cantTrade ?? [])
     setRioScore(character?.rioScore ?? 0)

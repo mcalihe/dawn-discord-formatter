@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist/js",
     "rootDir": "src",
-    "noEmit": false,
     "target": "ESNext",
     "module": "ESNext",
     "jsx": "react-jsx",

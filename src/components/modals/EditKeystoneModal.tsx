@@ -27,14 +27,20 @@ export const EditKeystoneModal = ({
   const { t } = useTranslation()
   const dungeonTranslations = useDungeonTranslations()
 
+  const dungeonExists = (value: string): boolean => {
+    return Object.values(DungeonId).includes(value as DungeonId)
+  }
+
   const [keystoneAvailable, setKeystoneAvailable] = useState(initialKeystoneAvailable)
   const [level, setLevel] = useState(initialLevel)
-  const [dungeon, setDungeon] = useState<DungeonId>(initialDungeon)
+  const [dungeon, setDungeon] = useState<DungeonId>(
+    dungeonExists(initialDungeon) ? initialDungeon : DungeonId.Ara
+  )
 
   useEffect(() => {
     if (open) {
       setLevel(initialLevel)
-      setDungeon(initialDungeon)
+      setDungeon(dungeonExists(initialDungeon) ? initialDungeon : DungeonId.Ara)
       setKeystoneAvailable(initialKeystoneAvailable)
     }
   }, [open, initialLevel, initialDungeon])
