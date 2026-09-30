@@ -1,6 +1,7 @@
-import { Pencil, Plus, Trash } from 'lucide-react'
+import { Divide, Pencil, Plus, Trash } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Switch } from '@headlessui/react'
 
 import { AddNewPlayerCard } from './components/cards/AddNewPlayerCard'
 import { PlayerCard } from './components/cards/PlayerCard'
@@ -19,6 +20,7 @@ import i18nOutput from './i18nOutput'
 import { Player } from './models/Player'
 import { DataStorageService } from './services/DataStorageService'
 import { DiscordFormatService } from './services/DiscordFormatService'
+import { UserNotes } from './components/UserNotes'
 
 export default function App() {
   // const test: Player[] = [
@@ -52,6 +54,7 @@ export default function App() {
   const { t } = useTranslation()
   const [teams, setTeams] = useState<Teams>(storedTeamsData.teams)
   const [currentTeamKey, setCurrentTeamKey] = useState<string>(storedTeamsData.currentTeam)
+  const [useDiscordId, setUseDiscordId] = useState(DataStorageService.loadUseDiscordIdFromLocalStorage())
 
   console.log(teams[currentTeamKey])
 
@@ -59,10 +62,10 @@ export default function App() {
   const [output, setOutput] = useState<string>()
   const [outputLanguage, setOutputLanguage] = useState<Language>(languages[0])
   const [showModal, setShowModal] = useState(false)
-  const AddNewPlayer = (name: string, discord?: string) => {
+  const AddNewPlayer = (name: string, discord?: string, discordId?: string) => {
     const highestId = Math.max(...players.map((o) => o.id))
     const newId = highestId != -Infinity ? highestId + 1 : 0
-    const newPlayers = [...players, { id: newId, name: name, discord: discord, characters: [] }]
+    const newPlayers = [...players, { id: newId, name: name, discord: discord, discordId: discordId, characters: [] }]
     setPlayers(newPlayers)
     teams[currentTeamKey] = newPlayers
     setTeams({ ...teams })
@@ -83,6 +86,9 @@ export default function App() {
     }
     setCurrentTeamKey(Object.keys(teams)[0])
   }
+  useEffect(() => {
+    DataStorageService.saveUseDiscordId(useDiscordId)
+  }, [useDiscordId])
 
   useEffect(() => {
     DataStorageService.saveTeams(teams)
@@ -113,11 +119,12 @@ export default function App() {
           players,
           classTranslations,
           armorSlotTranslations,
-          outputTranslator
+          outputTranslator,
+          useDiscordId
         )
       )
     })
-  }, [players, currentTeamKey, outputLanguage])
+  }, [players, currentTeamKey, outputLanguage, useDiscordId])
 
   const importData = (json: string) => {
     try {
@@ -232,13 +239,13 @@ export default function App() {
               }}
             />
           ))}
-          {players.length < 4 && <AddNewPlayerCard onClick={() => setShowModal(true)} />}
+          {players.length < 7 && <AddNewPlayerCard onClick={() => setShowModal(true)} />}
 
           <EditPlayerModal
             open={showModal}
             onClose={() => setShowModal(false)}
             mode={'create'}
-            onSave={(data) => AddNewPlayer(data.name, data.discord)}
+            onSave={(data) => AddNewPlayer(data.name, data.discord, data.discordId)}
           />
         </div>
       </div>
@@ -278,16 +285,30 @@ export default function App() {
       />
 
       <div>
-        <div className={'flex flex-row justify-between gap-4'}>
+        <div className={'flex flex-row justify-between gap-4 mb-4'}>
           <h2>Output</h2>
-          <LanguageSwitcher
-            isGlobal={false}
-            currentLanguage={outputLanguage}
-            onLngChange={setOutputLanguage}
-          />
+        </div>
+        <div className="flex items-center gap-2 mb-4">
+          <Switch
+            checked={useDiscordId}
+            onChange={setUseDiscordId}
+            className={`${
+              useDiscordId ? 'bg-blue-600' : 'bg-gray-700'
+            } relative inline-flex h-6 w-11 items-center rounded-full transition-colors`}
+          >
+            <span
+              className={`${
+                useDiscordId ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+            />
+          </Switch>
+          <span className="text-sm text-zinc-300">{t('discord.format.toggle.label')}</span>
         </div>
 
         <MarkdownOutput value={output} />
+      </div>
+      <div className={'flex flex-col gap-8'}>
+        <UserNotes className="mt-4" />
       </div>
       <Footer />
     </div>

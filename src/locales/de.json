@@ -57,6 +57,7 @@
   "modal.newPlayer.title": "Neuen Spieler hinzufügen",
   "modal.newPlayer.name.label": "Name",
   "modal.newPlayer.discord.label": "Discord‑Name (optional)",
+  "modal.newPlayer.discordId.label": "Discord ID (optional)",
   "modal.edit.team.title": "Team bearbeiten",
   "modal.add.team.title": "Neues Team hinzufügen",
   "modal.team.name.label": "Teamname",
@@ -148,5 +149,8 @@
   "spec.protectionWarrior": "Schutz",
   "trade.all.armor": "Handelt alle",
   "trade.all.armor.except": "Handelt alle außer: ",
-  "no.players.active": "Keine aktiven Charaktere"
+  "no.players.active": "Keine aktiven Charaktere",
+  "discord.format.toggle.label": "Verwende Discord-ID anstelle des Namens",
+  "notes.title": "Notizen",
+  "notes.placeholder": "Fügen Sie hier Ihre persönlichen Notizen hinzu. Sie werden automatisch gespeichert."
 }
