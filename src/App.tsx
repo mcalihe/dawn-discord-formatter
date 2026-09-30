@@ -128,19 +128,22 @@ export default function App() {
 
   const importData = (json: string) => {
     try {
-      const parsed = JSON.parse(json) as { teams: Teams; currentTeam: string }
-      const importedTeams = parsed.teams ?? []
+      const parsed = JSON.parse(json) as {
+        teams: Teams
+        current_team?: string
+        currentTeam?: string
+      }
 
       const parsedData = DataStorageService.loadTeamAndCurrentWithFallback(
         parsed.teams,
-        parsed.currentTeam
+        parsed.current_team ?? parsed.currentTeam ?? null
       )
 
       setTeams(parsedData.teams)
       setCurrentTeamKey(parsedData.currentTeam)
-      setPlayers(parsed.teams[parsedData.currentTeam] ?? [])
+      setPlayers(parsedData.teams[parsedData.currentTeam] ?? [])
       DataStorageService.saveCurrentTeamKey(parsedData.currentTeam)
-      DataStorageService.saveTeams(importedTeams)
+      DataStorageService.saveTeams(parsedData.teams)
     } catch (e) {
       console.error(e)
       alert('Invalid JSON. Could not parse.')

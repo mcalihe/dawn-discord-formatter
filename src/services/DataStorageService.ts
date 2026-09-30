@@ -1,5 +1,8 @@
+import { DEFAULT_DUNGEON } from '../data/Dungeons'
 import { CURRENT_TEAM, TEAMS, USE_DISCORD_ID } from '../data/StorageKeys'
 import { Teams } from '../data/Teams'
+import { Character } from '../models/Character'
+import { Player } from '../models/Player'
 
 export interface StoredTeamsData {
   teams: Teams
@@ -21,6 +24,7 @@ export class DataStorageService {
     let currentTeam = DataStorageService.NEW_TEAM_NAME
 
     try {
+      loadedTeams = this.normalizeTeams(loadedTeams)
       const teamKeys = Object.keys(loadedTeams ?? {})
 
       const firstLocalTeamKey = teamKeys.length > 0 ? teamKeys[0] : null
@@ -45,6 +49,43 @@ export class DataStorageService {
     return {
       teams: loadedTeams,
       currentTeam: currentTeam,
+    }
+  }
+
+  /**
+   * Makes data from older app versions usable by filling in fields that did not exist yet.
+   * Existing values are never changed, e.g. keystones of past seasons are kept as they are.
+   */
+  static normalizeTeams(teams: Teams): Teams {
+    if (!teams || typeof teams !== 'object' || Array.isArray(teams)) {
+      return {}
+    }
+    return Object.fromEntries(
+      Object.entries(teams).map(([key, players]) => [
+        key,
+        Array.isArray(players) ? players.map((p) => this.normalizePlayer(p)) : [],
+      ])
+    )
+  }
+
+  private static normalizePlayer(player: Player): Player {
+    return {
+      ...player,
+      characters: Array.isArray(player.characters)
+        ? player.characters.map((c) => this.normalizeCharacter(c))
+        : [],
+    }
+  }
+
+  private static normalizeCharacter(char: Character): Character {
+    return {
+      ...char,
+      specs: char.specs ?? [],
+      roles: char.roles ?? [],
+      cantTrade: char.cantTrade ?? [],
+      tradeAllArmor: char.tradeAllArmor ?? true,
+      keystoneAvailable: char.keystoneAvailable ?? !!char.keystone,
+      keystone: char.keystone ?? { level: 12, dungeon: DEFAULT_DUNGEON },
     }
   }
 

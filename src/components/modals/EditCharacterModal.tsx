@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Class, useClassTranslations } from '../../data/Class'
-import { DungeonId, useDungeonTranslations } from '../../data/Dungeons'
+import { currentDungeonOrDefault, DungeonId, useDungeonTranslations } from '../../data/Dungeons'
 import { Faction } from '../../data/Faction'
 import { Role } from '../../data/Roles'
 import { Spec, SPECS_BY_CLASS } from '../../data/Specs'
@@ -14,6 +14,8 @@ import { FactionRadioGroup } from '../controls/FactionRadioGroup'
 import { FloatingInput } from '../controls/FloatingInput'
 import { FloatingSelect } from '../controls/FloatingSelect'
 import { SpecMultiSelect } from '../controls/SpecMultiSelect'
+
+const DEFAULT_ILVL = 310
 
 interface NewCharacterModalProps {
   open: boolean
@@ -34,10 +36,6 @@ export const EditCharacterModal = ({
   const classTranslations = useClassTranslations(t)
   const dungeonTranslations = useDungeonTranslations()
 
-  const dungeonExists = (value?: string): boolean => {
-    return Object.values(DungeonId).includes(value as DungeonId)
-  }
-
   const CLASS_OPTIONS = Object.entries(classTranslations).map(([key, label]) => ({
     value: key,
     label,
@@ -48,15 +46,13 @@ export const EditCharacterModal = ({
   const [faction, setFaction] = useState(character?.faction ?? Faction.Horde)
   const [charClass, setCharClass] = useState<Class>(character?.class ?? Class.Hunter)
   const [specs, setSpecs] = useState<Spec[]>(character?.specs ?? [Spec.BeastMastery])
-  const [ilvl, setIlvl] = useState(character?.iLvl ?? 680)
+  const [ilvl, setIlvl] = useState(character?.iLvl ?? DEFAULT_ILVL)
   const [keystoneAvailable, setKeystoneAvailable] = useState(
     character?.keystoneAvailable === undefined ? true : character?.keystoneAvailable
   )
-  const [keystoneLevel, setKeystoneLevel] = useState(character?.keystone.level ?? 12)
+  const [keystoneLevel, setKeystoneLevel] = useState(character?.keystone?.level ?? 12)
   const [keystoneDungeon, setKeystoneDungeon] = useState<DungeonId>(
-    dungeonExists(character?.keystone.dungeon)
-      ? (character?.keystone.dungeon ?? DungeonId.Ara)
-      : DungeonId.Ara
+    currentDungeonOrDefault(character?.keystone?.dungeon)
   )
   const [tradeAllArmor, setTradeAllArmor] = useState(character?.tradeAllArmor ?? true)
   const [cantTrade, setCantTrade] = useState(character?.cantTrade ?? [])
@@ -69,14 +65,10 @@ export const EditCharacterModal = ({
     setFaction(character?.faction ?? Faction.Horde)
     setCharClass(character?.class ?? Class.Hunter)
     setSpecs(character?.specs ?? [Spec.BeastMastery])
-    setIlvl(character?.iLvl ?? 680)
+    setIlvl(character?.iLvl ?? DEFAULT_ILVL)
     setKeystoneAvailable(character?.keystoneAvailable ?? true)
-    setKeystoneLevel(character?.keystone.level ?? 12)
-    setKeystoneDungeon(
-      dungeonExists(character?.keystone.dungeon)
-        ? (character?.keystone.dungeon ?? DungeonId.Ara)
-        : DungeonId.Ara
-    )
+    setKeystoneLevel(character?.keystone?.level ?? 12)
+    setKeystoneDungeon(currentDungeonOrDefault(character?.keystone?.dungeon))
     setTradeAllArmor(character?.tradeAllArmor ?? true)
     setCantTrade(character?.cantTrade ?? [])
     setRioScore(character?.rioScore ?? 0)
