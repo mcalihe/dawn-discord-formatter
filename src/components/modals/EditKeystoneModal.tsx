@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DungeonId, useDungeonTranslations } from '../../data/Dungeons'
+import { currentDungeonOrDefault, DungeonId, useDungeonTranslations } from '../../data/Dungeons'
 import { FloatingInput } from '../controls/FloatingInput'
 import { FloatingSelect } from '../controls/FloatingSelect'
 
@@ -27,20 +27,14 @@ export const EditKeystoneModal = ({
   const { t } = useTranslation()
   const dungeonTranslations = useDungeonTranslations()
 
-  const dungeonExists = (value: string): boolean => {
-    return Object.values(DungeonId).includes(value as DungeonId)
-  }
-
   const [keystoneAvailable, setKeystoneAvailable] = useState(initialKeystoneAvailable)
   const [level, setLevel] = useState(initialLevel)
-  const [dungeon, setDungeon] = useState<DungeonId>(
-    dungeonExists(initialDungeon) ? initialDungeon : DungeonId.Ara
-  )
+  const [dungeon, setDungeon] = useState<DungeonId>(currentDungeonOrDefault(initialDungeon))
 
   useEffect(() => {
     if (open) {
       setLevel(initialLevel)
-      setDungeon(dungeonExists(initialDungeon) ? initialDungeon : DungeonId.Ara)
+      setDungeon(currentDungeonOrDefault(initialDungeon))
       setKeystoneAvailable(initialKeystoneAvailable)
     }
   }, [open, initialLevel, initialDungeon])

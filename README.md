@@ -61,6 +61,21 @@ A simple and sleek web tool for building and formatting M+ teams for the Dawn Wo
 
 ---
 
+## 🗓️ Updating for a New Season
+
+Current dungeon pool: **Midnight Season 2** (Altar of Fangs, Murder Row, Den of Nalorakk, The Blinding Vale, Voidscar Arena, King's Rest, Temple of Sethraliss, Ruby Life Pools).
+
+All season-specific data lives in `src/data/Dungeons.ts`:
+
+1. Move dungeons leaving the rotation from `DungeonId` to `LegacyDungeonId` (keep their id strings)
+2. Add the new dungeons to `DungeonId` and `useDungeonTranslations`
+3. Add the translation keys to `src/locales/*.json`
+4. Point `DEFAULT_DUNGEON` to a dungeon of the new season
+
+Saved characters are never modified. Keystones from past seasons stay in storage, are highlighted as outdated in the UI and default to the new season when edited.
+
+---
+
 ## 🛠 Tech Stack
 
 - ⚛️ React + TypeScript

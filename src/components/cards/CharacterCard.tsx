@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useClassTranslations } from '../../data/Class'
+import { isCurrentDungeon } from '../../data/Dungeons'
 import { Character } from '../../models/Character'
 import { ConfirmModal } from '../modals/ConfirmModal'
 import { EditCharacterModal } from '../modals/EditCharacterModal'
@@ -27,6 +28,7 @@ export const CharacterCard = ({
   const classTranslations = useClassTranslations(t)
 
   const [keystoneModalOpen, setKeystoneModalOpen] = useState(false)
+  const keystoneOutdated = char.keystoneAvailable && !isCurrentDungeon(char.keystone.dungeon)
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
 
@@ -51,14 +53,18 @@ export const CharacterCard = ({
         <button
           onClick={() => setKeystoneModalOpen(true)}
           className={clsx(
-            char.keystoneAvailable
+            char.keystoneAvailable && !keystoneOutdated
               ? 'bg-zinc-700 hover:border-blue-400 hover:bg-blue-500/20'
               : 'bg-orange-900/40 hover:border-orange-400 hover:bg-orange-500/20',
             'self-start text-xs px-2 py-1 rounded border border-zinc-600  text-white' +
               'focus:outline-none focus:ring-1 focus:ring-blue-500' +
               'transition-colors duration-150 cursor-pointer'
           )}
-          title={t('change.keystone.title')}
+          title={
+            keystoneOutdated
+              ? t('keystone.outdated', 'Keystone is from a previous season. Click to update.')
+              : t('change.keystone.title')
+          }
         >
           {char.keystoneAvailable
             ? `+${char.keystone.level} ${char.keystone.dungeon}`

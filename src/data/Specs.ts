@@ -12,6 +12,7 @@ export enum Spec {
   // Demon Hunter
   Havoc = 'Havoc',
   Vengeance = 'Vengeance',
+  Devourer = 'Devourer',
 
   // Druid
   Balance = 'Balance',
@@ -80,6 +81,7 @@ export function useSpecTranslations(): Record<Spec, string> {
 
     [Spec.Havoc]: t('spec.havoc'),
     [Spec.Vengeance]: t('spec.vengeance'),
+    [Spec.Devourer]: t('spec.devourer'),
 
     [Spec.Balance]: t('spec.balance'),
     [Spec.Feral]: t('spec.feral'),
@@ -137,6 +139,7 @@ export const SPECS_BY_CLASS: Record<Class, { spec: Spec; role: Role }[]> = {
   [Class.DemonHunter]: [
     { spec: Spec.Havoc, role: Role.DPS },
     { spec: Spec.Vengeance, role: Role.Tank },
+    { spec: Spec.Devourer, role: Role.DPS },
   ],
   [Class.Druid]: [
     { spec: Spec.Balance, role: Role.DPS },
